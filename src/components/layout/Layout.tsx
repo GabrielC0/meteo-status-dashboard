@@ -1,0 +1,22 @@
+import { ReactNode } from 'react';
+import Header from './Header';
+
+import styles from './Layout.module.css';
+
+interface LayoutProps {
+  children: ReactNode;
+  title?: string;
+}
+
+const Layout = ({ children, title = "Weather Status Dashboard" }: LayoutProps) => {
+  return (
+    <div className={styles.layout}>
+      <Header title={title} />
+      <main className={styles.main}>
+        {children}
+      </main>
+    </div>
+  );
+};
+
+export default Layout;

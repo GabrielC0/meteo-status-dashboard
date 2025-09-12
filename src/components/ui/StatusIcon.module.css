@@ -1,0 +1,71 @@
+.small {
+  width: 16px;
+  height: 16px;
+}
+
+.medium {
+  width: 20px;
+  height: 20px;
+}
+
+.large {
+  width: 24px;
+  height: 24px;
+}
+
+.iconSUCCESS {
+  color: #28a745;
+  transition: all 0.2s ease;
+}
+
+.iconWARNING {
+  color: #ffc107;
+  transition: all 0.2s ease;
+}
+
+.iconERROR {
+  color: #dc3545;
+  transition: all 0.2s ease;
+}
+
+.iconUNKNOWN {
+  color: #6c757d;
+  transition: all 0.2s ease;
+}
+
+.iconSUCCESS:hover {
+  color: #218838;
+  transform: scale(1.1);
+}
+
+.iconWARNING:hover {
+  color: #e0a800;
+  transform: scale(1.1);
+}
+
+.iconERROR:hover {
+  color: #c82333;
+  transform: scale(1.1);
+}
+
+.iconUNKNOWN:hover {
+  color: #5a6268;
+  transform: scale(1.1);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.iconSUCCESS {
+  animation: pulse 2s infinite;
+}
+
+.iconERROR {
+  animation: pulse 1.5s infinite;
+}

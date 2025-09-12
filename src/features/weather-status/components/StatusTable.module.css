@@ -1,0 +1,112 @@
+.tableContainer {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border: 1px solid #e1e5e9;
+}
+
+.statusTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.statusTable th {
+  background-color: #34495e;
+  color: white;
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 2px solid #2c3e50;
+}
+
+.statusTable th:nth-child(2) {
+  text-align: center;
+}
+
+.statusTable th:nth-child(3) {
+  text-align: right;
+}
+
+.statusTable th:first-child {
+  border-left: none;
+}
+
+.statusTable th:last-child {
+  border-right: none;
+}
+
+.statusTable td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e1e5e9;
+  vertical-align: middle;
+}
+
+.statusTable tr:hover {
+  background-color: #f8f9fa;
+}
+
+.statusTable tr:last-child td {
+  border-bottom: none;
+}
+
+.serviceName {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.operationsCount {
+  font-weight: 400;
+  color: #6c757d;
+  font-size: 0.9em;
+  font-style: italic;
+}
+
+.statusCell {
+  text-align: center;
+  padding: 8px 16px !important;
+}
+
+.dateCell {
+  text-align: right;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+
+
+.emptyRow {
+  height: 120px;
+}
+
+.emptyMessage {
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+  background-color: #f8f9fa;
+}
+
+@media (max-width: 768px) {
+  .statusTable {
+    font-size: 0.8rem;
+  }
+  
+  .statusTable th,
+  .statusTable td {
+    padding: 8px 12px;
+  }
+  
+  .dateCell {
+    font-size: 0.75rem;
+  }
+  
+  .statusTable th:nth-child(2) {
+    text-align: center;
+  }
+
+  .statusTable th:nth-child(3) {
+    text-align: right;
+  }
+}
