@@ -7,6 +7,36 @@ import { useMemo, useState } from "react";
 
 import { SortKey } from "../types/index.types";
 
+// Converts Excel serial date number to milliseconds
+const excelDaysToMilliseconds = (excelDaysString: string): number => {
+  const excelDaysCount = Number(excelDaysString);
+
+  if (!Number.isFinite(excelDaysCount)) {
+    return 0;
+  }
+
+  return (
+    Date.UTC(1899, 11, 30) + (excelDaysCount + 29221) * 24 * 60 * 60 * 1000
+  );
+};
+
+// Converts Excel serial date number to formatted date string
+const formatUpdateDate = (excelDaysString: string): string => {
+  const dateInMilliseconds = excelDaysToMilliseconds(excelDaysString);
+
+  if (dateInMilliseconds === 0) {
+    return "Date inconnue";
+  }
+
+  const formattedDate = new Date(dateInMilliseconds);
+
+  return formattedDate.toLocaleDateString("fr-FR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+};
+
 const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
   const [searchValue, setSearchValue] = useState("");
   const [selectedCompany, setSelectedCompany] = useState("ALL");
@@ -40,8 +70,11 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
     > = {
       name: (a, b) => a.name.localeCompare(b.name),
       status: (a, b) => a.marketDataStatus.localeCompare(b.marketDataStatus),
-      date: (a, b) =>
-        a.lastMarketDataUpdate.localeCompare(b.lastMarketDataUpdate),
+      date: (a, b) => {
+        const aMs = excelDaysToMilliseconds(a.lastMarketDataUpdate);
+        const bMs = excelDaysToMilliseconds(b.lastMarketDataUpdate);
+        return aMs - bMs;
+      },
     };
 
     const sorted = [...filteredByCompany].sort((a, b) => {
@@ -155,7 +188,7 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
                   />
                 </td>
                 <td className={styles.dateCell}>
-                  {enterprise.lastMarketDataUpdate}
+                  {formatUpdateDate(enterprise.lastMarketDataUpdate)}
                 </td>
               </tr>
             ))
