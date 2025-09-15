@@ -6,21 +6,31 @@ const ErrorIcon = ({ width = 20, height = 20, className }: IconProps) => {
       width={width}
       height={height}
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
+      viewBox="0 0 512 512"
       className={className}
+      aria-hidden="true"
     >
-      <circle cx="12" cy="12" r="10" fill="currentColor" />
       <path
-        d="m15 9-6 6"
-        stroke="white"
-        strokeWidth="2"
+        d="M404.33 152.89H392.2C384.71 84.85 326.14 32 256 32C227.819 31.9729 200.322 40.6756 177.289 56.9116C154.255 73.1476 136.817 96.1198 127.37 122.67H122.8C72.86 122.67 32 163.47 32 213.33C32 263.2 72.86 304 122.8 304H404.33C446 304 480 270 480 228.44C480 186.89 446 152.89 404.33 152.89Z"
+        stroke="var(--text-color-secondary)"
+        strokeWidth="36"
+        fill="none"
+      />
+
+      <path
+        d="M208 304L192 400H240V480L320 368H272L288 304"
+        stroke="var(--yellow)"
+        strokeWidth="36"
+        fill="none"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+
       <path
-        d="m9 9 6 6"
-        stroke="white"
-        strokeWidth="2"
+        d="M120 352L96 400M136 432L120 464M400 352L376 400M416 432L400 464"
+        stroke="var(--cyan)"
+        strokeWidth="36"
+        fill="none"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

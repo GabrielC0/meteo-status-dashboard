@@ -1,6 +1,6 @@
 "use client";
 
-import { StatusBadge } from "@/components/ui";
+import { StatusIcons } from "@/components/icons";
 import { MarketDataCompany } from "../types/index.types";
 import styles from "./StatusTable.module.css";
 import { useMemo, useState } from "react";
@@ -160,8 +160,8 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
       <table className={styles.statusTable}>
         <thead>
           <tr>
-            <th>Entreprise</th>
             <th>Status</th>
+            <th>Entreprise</th>
             <th>Dernière Mise à Jour</th>
           </tr>
         </thead>
@@ -173,25 +173,30 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
               </td>
             </tr>
           ) : (
-            rows.map((enterprise) => (
-              <tr key={enterprise.id}>
-                <td className={styles.serviceName}>
-                  {enterprise.name}
-                  <span className={styles.operationsCount}>
-                    ({enterprise.totalOperations} opérations)
-                  </span>
-                </td>
-                <td className={styles.statusCell}>
-                  <StatusBadge
-                    status={enterprise.marketDataStatus}
-                    size="medium"
-                  />
-                </td>
-                <td className={styles.dateCell}>
-                  {formatUpdateDate(enterprise.lastMarketDataUpdate)}
-                </td>
-              </tr>
-            ))
+            rows.map((enterprise) => {
+              const StatusIcon = StatusIcons[enterprise.marketDataStatus];
+
+              return (
+                <tr key={enterprise.id}>
+                  <td className={styles.statusCell}>
+                    <StatusIcon
+                      width={24}
+                      height={24}
+                      className={styles.statusIcon}
+                    />
+                  </td>
+                  <td className={styles.serviceName}>
+                    {enterprise.name}
+                    <span className={styles.operationsCount}>
+                      ({enterprise.totalOperations} opérations)
+                    </span>
+                  </td>
+                  <td className={styles.dateCell}>
+                    {formatUpdateDate(enterprise.lastMarketDataUpdate)}
+                  </td>
+                </tr>
+              );
+            })
           )}
         </tbody>
       </table>

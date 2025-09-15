@@ -6,17 +6,107 @@ const SuccessIcon = ({ width = 20, height = 20, className }: IconProps) => {
       width={width}
       height={height}
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
+      viewBox="0 0 512 512"
       className={className}
+      aria-hidden="true"
     >
-      <circle cx="12" cy="12" r="10" fill="currentColor" />
-      <path
-        d="m9 12 2 2 4-4"
-        stroke="white"
-        strokeWidth="2"
+      <line
+        x1="256"
+        x2="256"
+        y1="48"
+        y2="96"
         fill="none"
+        stroke="var(--yellow)"
         strokeLinecap="round"
-        strokeLinejoin="round"
+        strokeMiterlimit="10"
+        strokeWidth="36"
+      />
+      <line
+        x1="256"
+        x2="256"
+        y1="416"
+        y2="464"
+        fill="none"
+        stroke="var(--yellow)"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
+        strokeWidth="36"
+      />
+      <line
+        x1="403.08"
+        x2="369.14"
+        y1="108.92"
+        y2="142.86"
+        fill="none"
+        stroke="var(--yellow)"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
+        strokeWidth="36"
+      />
+      <line
+        x1="142.86"
+        x2="108.92"
+        y1="369.14"
+        y2="403.08"
+        fill="none"
+        stroke="var(--yellow)"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
+        strokeWidth="36"
+      />
+      <line
+        x1="464"
+        x2="416"
+        y1="256"
+        y2="256"
+        fill="none"
+        stroke="var(--yellow)"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
+        strokeWidth="36"
+      />
+      <line
+        x1="96"
+        x2="48"
+        y1="256"
+        y2="256"
+        fill="none"
+        stroke="var(--yellow)"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
+        strokeWidth="36"
+      />
+      <line
+        x1="403.08"
+        x2="369.14"
+        y1="403.08"
+        y2="369.14"
+        fill="none"
+        stroke="var(--yellow)"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
+        strokeWidth="36"
+      />
+      <line
+        x1="142.86"
+        x2="108.92"
+        y1="142.86"
+        y2="108.92"
+        fill="none"
+        stroke="var(--yellow)"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
+        strokeWidth="36"
+      />
+      <circle
+        cx="256"
+        cy="256"
+        r="80"
+        fill="none"
+        stroke="var(--yellow)"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
+        strokeWidth="36"
       />
     </svg>
   );
