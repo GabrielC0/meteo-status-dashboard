@@ -2,9 +2,10 @@
 
 import { StatusIcons } from "@/components/icons";
 import { MarketDataCompany } from "../types/index.types";
-import styles from "./StatusTable.module.css";
 import { useMemo, useState } from "react";
+import MultiSelect from "@/components/ui/MultiSelect";
 
+import styles from "./StatusTable.module.css";
 import { SortKey } from "../types/index.types";
 
 // Converts Excel serial date number to milliseconds
@@ -38,8 +39,7 @@ const formatUpdateDate = (excelDaysString: string): string => {
 };
 
 const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
-  const [searchValue, setSearchValue] = useState("");
-  const [selectedCompany, setSelectedCompany] = useState("ALL");
+  const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
   const [sortKey, setSortKey] = useState<SortKey>("name");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
 
@@ -51,18 +51,10 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
   }, [enterprises]);
 
   const rows = useMemo(() => {
-    const formatedsearchValue = searchValue.trim().toLowerCase();
-
-    const filteredBySearch = formatedsearchValue
-      ? enterprises.filter((e) =>
-          e.name.toLowerCase().includes(formatedsearchValue)
-        )
-      : enterprises;
-
     const filteredByCompany =
-      selectedCompany !== "ALL"
-        ? filteredBySearch.filter((e) => e.name === selectedCompany)
-        : filteredBySearch;
+      selectedCompanies.length > 0
+        ? enterprises.filter((e) => selectedCompanies.includes(e.name))
+        : enterprises;
 
     const comparatorBy: Record<
       SortKey,
@@ -83,32 +75,30 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
     });
 
     return sorted;
-  }, [enterprises, searchValue, selectedCompany, sortKey, sortDir]);
+  }, [enterprises, selectedCompanies, sortKey, sortDir]);
 
   return (
     <div className={styles.tableContainer}>
       <div className={styles.filtersBar}>
         <div className={styles.filtersLeft}>
-          <input
-            className={styles.searchInput}
-            type="text"
-            placeholder="Rechercher une entreprise..."
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
+          <MultiSelect
+            options={companyNames.map((n) => ({ value: n, label: n }))}
+            value={selectedCompanies}
+            onChange={setSelectedCompanies}
+            placeholder="Toutes les entreprises"
+            horsContractList={[
+              "adp",
+              "agache",
+              "biomerieux",
+              "bonduelle",
+              "carrefour",
+              "crca",
+              "gdf",
+              "ivanhoe",
+              "seb",
+              "vinciconstruction",
+            ]}
           />
-          <select
-            className={styles.select}
-            value={selectedCompany}
-            onChange={(e) => setSelectedCompany(e.target.value)}
-            aria-label="Filtrer par entreprise"
-          >
-            <option value="ALL">Toutes les entreprises</option>
-            {companyNames.map((name) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
         </div>
         <div className={styles.filtersRight}>
           <label className={styles.label}>
@@ -145,8 +135,7 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
             type="button"
             className={styles.sortButton}
             onClick={() => {
-              setSearchValue("");
-              setSelectedCompany("ALL");
+              setSelectedCompanies([]);
               setSortKey("name");
               setSortDir("asc");
             }}
