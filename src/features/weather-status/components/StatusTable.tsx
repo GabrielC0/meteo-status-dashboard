@@ -3,10 +3,113 @@
 import { StatusBadge } from "@/components/ui";
 import { MarketDataCompany } from "../types/index.types";
 import styles from "./StatusTable.module.css";
+import { useMemo, useState } from "react";
+
+import { SortKey } from "../types/index.types";
 
 const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
+  const [searchValue, setSearchValue] = useState("");
+  const [selectedCompany, setSelectedCompany] = useState("ALL");
+  const [sortKey, setSortKey] = useState<SortKey>("name");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+
+  const companyNames = useMemo(() => {
+    const names = Array.from(new Set(enterprises.map((e) => e.name))).sort(
+      (a, b) => a.localeCompare(b)
+    );
+    return names;
+  }, [enterprises]);
+
+  const rows = useMemo(() => {
+    const formatedsearchValue = searchValue.trim().toLowerCase();
+
+    const filteredBySearch = formatedsearchValue
+      ? enterprises.filter((e) =>
+          e.name.toLowerCase().includes(formatedsearchValue)
+        )
+      : enterprises;
+
+    const filteredByCompany =
+      selectedCompany !== "ALL"
+        ? filteredBySearch.filter((e) => e.name === selectedCompany)
+        : filteredBySearch;
+
+    const comparatorBy: Record<
+      SortKey,
+      (a: MarketDataCompany, b: MarketDataCompany) => number
+    > = {
+      name: (a, b) => a.name.localeCompare(b.name),
+      status: (a, b) => a.marketDataStatus.localeCompare(b.marketDataStatus),
+      date: (a, b) =>
+        a.lastMarketDataUpdate.localeCompare(b.lastMarketDataUpdate),
+    };
+
+    const sorted = [...filteredByCompany].sort((a, b) => {
+      const cmp = comparatorBy[sortKey](a, b);
+      return sortDir === "asc" ? cmp : -cmp;
+    });
+
+    return sorted;
+  }, [enterprises, searchValue, selectedCompany, sortKey, sortDir]);
+
   return (
     <div className={styles.tableContainer}>
+      <div className={styles.filtersBar}>
+        <div className={styles.filtersLeft}>
+          <input
+            className={styles.searchInput}
+            type="text"
+            placeholder="Rechercher une entreprise..."
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+          />
+          <select
+            className={styles.select}
+            value={selectedCompany}
+            onChange={(e) => setSelectedCompany(e.target.value)}
+            aria-label="Filtrer par entreprise"
+          >
+            <option value="ALL">Toutes les entreprises</option>
+            {companyNames.map((name) => (
+              <option key={name} value={name}>
+                {name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className={styles.filtersRight}>
+          <label className={styles.label}>
+            Trier par
+            <select
+              className={styles.select}
+              value={sortKey}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (
+                  value === "name" ||
+                  value === "status" ||
+                  value === "date"
+                ) {
+                  setSortKey(value);
+                }
+              }}
+            >
+              <option value="name">Nom</option>
+              <option value="status">Statut</option>
+              <option value="date">Dernière mise à jour</option>
+            </select>
+          </label>
+          <button
+            type="button"
+            className={styles.sortButton}
+            onClick={() => setSortDir((o) => (o === "asc" ? "desc" : "asc"))}
+            aria-label="Changer l'ordre de tri"
+            title={sortDir === "asc" ? "Ordre ascendant" : "Ordre descendant"}
+          >
+            {sortDir === "asc" ? "▲" : "▼"}
+          </button>
+        </div>
+      </div>
       <table className={styles.statusTable}>
         <thead>
           <tr>
@@ -16,14 +119,14 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
           </tr>
         </thead>
         <tbody>
-          {enterprises.length === 0 ? (
+          {rows.length === 0 ? (
             <tr className={styles.emptyRow}>
               <td colSpan={3} className={styles.emptyMessage}>
                 Aucune entreprise configurée
               </td>
             </tr>
           ) : (
-            enterprises.map((enterprise) => (
+            rows.map((enterprise) => (
               <tr key={enterprise.id}>
                 <td className={styles.serviceName}>
                   {enterprise.name}
