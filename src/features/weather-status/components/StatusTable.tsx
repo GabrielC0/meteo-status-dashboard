@@ -108,6 +108,20 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
           >
             {sortDir === "asc" ? "▲" : "▼"}
           </button>
+          <button
+            type="button"
+            className={styles.sortButton}
+            onClick={() => {
+              setSearchValue("");
+              setSelectedCompany("ALL");
+              setSortKey("name");
+              setSortDir("asc");
+            }}
+            aria-label="Réinitialiser les filtres"
+            title="Réinitialiser les filtres"
+          >
+            Reset
+          </button>
         </div>
       </div>
       <table className={styles.statusTable}>

@@ -60,6 +60,10 @@
   cursor: pointer;
 }
 
+.sortButton {
+  margin-left: 8px;
+}
+
 .statusTable {
   width: 100%;
   border-collapse: collapse;
