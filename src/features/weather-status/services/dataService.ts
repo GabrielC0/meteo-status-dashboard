@@ -1,7 +1,7 @@
 "use client";
 
 import Papa from "papaparse";
-import { MarketDataCompany, MarketDataStatus } from "../types/index.types";
+import { MarketDataCompany, MarketDataStatus, MarketDataOperation } from "../types/index.types";
 
 const CSV_FILE = "/csv/checkDataMarket_db001_20250911_1012.csv";
 
@@ -22,7 +22,7 @@ const parseCSVData = (csvContent: string): MarketDataCompany[] => {
   const companyMap = new Map<string, MarketDataCompany>();
 
   data.forEach((row) => {
-    const [marketDataCompany, , lastMarketDataUpdate] = row;
+    const [marketDataCompany, operationType, lastMarketDataUpdate, devise1, devise2OrTypeRecup, typeRecuperation] = row;
 
     if (
       !marketDataCompany ||
@@ -35,18 +35,36 @@ const parseCSVData = (csvContent: string): MarketDataCompany[] => {
       return;
     }
 
+    const devise2: string | undefined = (operationType === "FXCROSS" || operationType === "PTSWAP")
+      ? devise2OrTypeRecup
+      : undefined;
+
+    const finalTypeRecuperation: string = (operationType === "FXCROSS" || operationType === "PTSWAP")
+      ? typeRecuperation || ""
+      : devise2OrTypeRecup || "";
+
+    const currentOperation: MarketDataOperation = {
+      operationType: operationType || "",
+      lastMarketDataUpdate: lastMarketDataUpdate || "",
+      devise1: devise1 || "",
+      devise2: devise2,
+      typeRecuperation: finalTypeRecuperation,
+    };
+
     const existing = companyMap.get(marketDataCompany);
 
     // Group data by company
     if (existing) {
       existing.totalOperations++;
+      existing.operations.push(currentOperation);
     } else {
       const newCompany = {
         id: marketDataCompany,
         name: marketDataCompany,
         totalOperations: 1,
         marketDataStatus: getRandomStatus(),
-        lastMarketDataUpdate: lastMarketDataUpdate,
+        lastMarketDataUpdate: lastMarketDataUpdate || "",
+        operations: [currentOperation],
       };
       companyMap.set(marketDataCompany, newCompany);
     }

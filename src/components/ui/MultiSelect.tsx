@@ -28,7 +28,9 @@ const MultiSelect = ({
   useEffect(() => {
     const onDocClick = (e: MouseEvent) => {
       if (!rootRef.current) return;
-      if (!rootRef.current.contains(e.target as Node)) setOpen(false);
+      const target = e.target;
+      if (target instanceof Node && !rootRef.current.contains(target))
+        setOpen(false);
     };
 
     document.addEventListener("mousedown", onDocClick);

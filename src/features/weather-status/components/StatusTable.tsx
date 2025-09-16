@@ -2,6 +2,7 @@
 
 import StatusIcon from "@/components/ui/StatusIcon";
 import NoContractIcon from "@/components/icons/NoContractIcon";
+import Modal from "@/components/ui/Modal";
 import { MarketDataCompany } from "../types/index.types";
 import { useMemo, useState } from "react";
 import MultiSelect from "@/components/ui/MultiSelect";
@@ -44,6 +45,9 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
   const [sortKey, setSortKey] = useState<SortKey>("date");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [showHorsContrat, setShowHorsContrat] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedEnterprise, setSelectedEnterprise] =
+    useState<MarketDataCompany | null>(null);
 
   const horsContractList = useMemo(
     () => [
@@ -212,7 +216,26 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
                           gap: "8px",
                         }}
                       >
-                        <span>{enterprise.name}</span>
+                        <span
+                          onClick={() => {
+                            setSelectedEnterprise(enterprise);
+                            setIsModalOpen(true);
+                          }}
+                          onMouseDown={(e) => e.preventDefault()}
+                          style={{
+                            cursor: "pointer",
+                            userSelect: "none",
+                            transition: "color 0.2s ease",
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.color = "#007acc";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.color = "inherit";
+                          }}
+                        >
+                          {enterprise.name}
+                        </span>
                         {isHorsContrat && (
                           <NoContractIcon
                             width={16}
@@ -235,6 +258,142 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
           )}
         </tbody>
       </table>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedEnterprise(null);
+        }}
+        title={`Détails des opérations - ${selectedEnterprise?.name || ""}`}
+      >
+        {selectedEnterprise && (
+          <div>
+            <div
+              style={{
+                marginBottom: "20px",
+                padding: "16px",
+                backgroundColor: "#f8f9fa",
+                borderRadius: "8px",
+              }}
+            >
+              <p>
+                <strong>Nombre total d&apos;opérations:</strong>
+                {selectedEnterprise.totalOperations}
+              </p>
+              <p>
+                <strong>Statut:</strong> {selectedEnterprise.marketDataStatus}
+              </p>
+              <p>
+                <strong>Dernière mise à jour:</strong>
+                {formatUpdateDate(selectedEnterprise.lastMarketDataUpdate)}
+              </p>
+            </div>
+
+            <table
+              style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                fontSize: "14px",
+              }}
+            >
+              <thead>
+                <tr style={{ backgroundColor: "#f1f3f4" }}>
+                  <th
+                    style={{
+                      padding: "12px",
+                      textAlign: "left",
+                      border: "1px solid #ddd",
+                    }}
+                  >
+                    #
+                  </th>
+                  <th
+                    style={{
+                      padding: "12px",
+                      textAlign: "left",
+                      border: "1px solid #ddd",
+                    }}
+                  >
+                    Type d&apos;opération
+                  </th>
+                  <th
+                    style={{
+                      padding: "12px",
+                      textAlign: "left",
+                      border: "1px solid #ddd",
+                    }}
+                  >
+                    Devise 1
+                  </th>
+                  <th
+                    style={{
+                      padding: "12px",
+                      textAlign: "left",
+                      border: "1px solid #ddd",
+                    }}
+                  >
+                    Devise 2
+                  </th>
+                  <th
+                    style={{
+                      padding: "12px",
+                      textAlign: "left",
+                      border: "1px solid #ddd",
+                    }}
+                  >
+                    Type récupération
+                  </th>
+                  <th
+                    style={{
+                      padding: "12px",
+                      textAlign: "left",
+                      border: "1px solid #ddd",
+                    }}
+                  >
+                    Dernière MàJ
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {selectedEnterprise.operations.map((operation, index) => (
+                  <tr
+                    key={index}
+                    style={{
+                      backgroundColor: index % 2 === 0 ? "#ffffff" : "#f9f9f9",
+                    }}
+                  >
+                    <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                      {index + 1}
+                    </td>
+                    <td
+                      style={{
+                        padding: "10px",
+                        border: "1px solid #ddd",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {operation.operationType}
+                    </td>
+                    <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                      {operation.devise1}
+                    </td>
+                    <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                      {operation.devise2 || "-"}
+                    </td>
+                    <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                      {operation.typeRecuperation}
+                    </td>
+                    <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                      {formatUpdateDate(operation.lastMarketDataUpdate)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 };
