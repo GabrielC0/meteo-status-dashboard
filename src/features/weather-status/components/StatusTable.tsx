@@ -1,6 +1,7 @@
 "use client";
 
-import { StatusIcons } from "@/components/icons";
+import StatusIcon from "@/components/ui/StatusIcon";
+import NoContractIcon from "@/components/icons/NoContractIcon";
 import { MarketDataCompany } from "../types/index.types";
 import { useMemo, useState } from "react";
 import MultiSelect from "@/components/ui/MultiSelect";
@@ -40,8 +41,25 @@ const formatUpdateDate = (excelDaysString: string): string => {
 
 const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
   const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
-  const [sortKey, setSortKey] = useState<SortKey>("name");
-  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+  const [sortKey, setSortKey] = useState<SortKey>("date");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
+  const [showHorsContrat, setShowHorsContrat] = useState<boolean>(false);
+
+  const horsContractList = useMemo(
+    () => [
+      "adp",
+      "agache",
+      "biomerieux",
+      "bonduelle",
+      "carrefour",
+      "crca",
+      "gdf",
+      "ivanhoe",
+      "seb",
+      "vinciconstruction",
+    ],
+    []
+  );
 
   const companyNames = useMemo(() => {
     const names = Array.from(new Set(enterprises.map((e) => e.name))).sort(
@@ -51,10 +69,16 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
   }, [enterprises]);
 
   const rows = useMemo(() => {
+    const filteredByContract = showHorsContrat
+      ? enterprises
+      : enterprises.filter(
+          (e) => !horsContractList.includes(e.name.toLowerCase())
+        );
+
     const filteredByCompany =
       selectedCompanies.length > 0
-        ? enterprises.filter((e) => selectedCompanies.includes(e.name))
-        : enterprises;
+        ? filteredByContract.filter((e) => selectedCompanies.includes(e.name))
+        : filteredByContract;
 
     const comparatorBy: Record<
       SortKey,
@@ -75,7 +99,14 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
     });
 
     return sorted;
-  }, [enterprises, selectedCompanies, sortKey, sortDir]);
+  }, [
+    enterprises,
+    selectedCompanies,
+    sortKey,
+    sortDir,
+    showHorsContrat,
+    horsContractList,
+  ]);
 
   return (
     <div className={styles.tableContainer}>
@@ -86,18 +117,8 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
             value={selectedCompanies}
             onChange={setSelectedCompanies}
             placeholder="Toutes les entreprises"
-            horsContractList={[
-              "adp",
-              "agache",
-              "biomerieux",
-              "bonduelle",
-              "carrefour",
-              "crca",
-              "gdf",
-              "ivanhoe",
-              "seb",
-              "vinciconstruction",
-            ]}
+            horsContractList={horsContractList}
+            onHorsContratChange={setShowHorsContrat}
           />
         </div>
         <div className={styles.filtersRight}>
@@ -136,8 +157,9 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
             className={styles.sortButton}
             onClick={() => {
               setSelectedCompanies([]);
-              setSortKey("name");
-              setSortDir("asc");
+              setSortKey("date");
+              setSortDir("desc");
+              setShowHorsContrat(false);
             }}
             aria-label="Réinitialiser les filtres"
             title="Réinitialiser les filtres"
@@ -163,22 +185,46 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
             </tr>
           ) : (
             rows.map((enterprise) => {
-              const StatusIcon = StatusIcons[enterprise.marketDataStatus];
+              const isHorsContrat = horsContractList.includes(
+                enterprise.name.toLowerCase()
+              );
 
               return (
                 <tr key={enterprise.id}>
                   <td className={styles.statusCell}>
                     <StatusIcon
-                      width={24}
-                      height={24}
-                      className={styles.statusIcon}
+                      status={enterprise.marketDataStatus}
+                      size="large"
                     />
                   </td>
                   <td className={styles.serviceName}>
-                    {enterprise.name}
-                    <span className={styles.operationsCount}>
-                      ({enterprise.totalOperations} opérations)
-                    </span>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                      >
+                        <span>{enterprise.name}</span>
+                        {isHorsContrat && (
+                          <NoContractIcon
+                            width={16}
+                            height={16}
+                            className={styles.noContractIcon}
+                          />
+                        )}
+                      </div>
+                      <span className={styles.operationsCount}>
+                        ({enterprise.totalOperations} opérations)
+                      </span>
+                    </div>
                   </td>
                   <td className={styles.dateCell}>
                     {formatUpdateDate(enterprise.lastMarketDataUpdate)}

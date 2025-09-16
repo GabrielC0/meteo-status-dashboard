@@ -10,4 +10,5 @@ export type MultiSelectProps = {
   placeholder?: string;
   maxVisible?: number;
   horsContractList?: string[];
+  onHorsContratChange?: (show: boolean) => void;
 };

@@ -1,5 +1,6 @@
 import { MarketDataStatus } from "@/features/weather-status/types/index.types";
 import { StatusIcons } from "@/components/icons";
+import { Tooltip } from "react-tooltip";
 import styles from "./StatusIcon.module.css";
 
 export interface IconProps {
@@ -20,19 +21,58 @@ const StatusIcon = ({ status, size = "medium" }: StatusIconProps) => {
     large: { width: 24, height: 24 },
   };
 
+  const statusLabels = {
+    SUCCESS: "Success",
+    WARNING: "Warning",
+    ERROR: "Error",
+    UNKNOWN: "Unknown",
+  };
+
+  const statusColors = {
+    SUCCESS: "#22c55e",
+    WARNING: "#f59e0b",
+    ERROR: "#ef4444",
+    UNKNOWN: "#6b7280",
+  };
+
   const currentSize = sizeConfig[size];
   const statusClass = styles[`icon${status}`];
   const sizeClass = styles[size];
   const className = `${statusClass} ${sizeClass}`;
+  const tooltipId = `status-tooltip-${status}-${Math.random()
+    .toString(36)
+    .slice(2, 11)}`;
 
   const IconComponent = StatusIcons[status];
 
   return (
-    <IconComponent
-      width={currentSize.width}
-      height={currentSize.height}
-      className={className}
-    />
+    <>
+      <div
+        data-tooltip-id={tooltipId}
+        style={{ display: "inline-block", cursor: "default" }}
+      >
+        <IconComponent
+          width={currentSize.width}
+          height={currentSize.height}
+          className={className}
+        />
+      </div>
+      <Tooltip
+        id={tooltipId}
+        content={statusLabels[status]}
+        place="top"
+        style={{
+          backgroundColor: statusColors[status],
+          color: "#fff",
+          borderRadius: "6px",
+          padding: "8px 12px",
+          fontSize: "14px",
+          fontWeight: "500",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.15)",
+          zIndex: 1000,
+        }}
+      />
+    </>
   );
 };
 

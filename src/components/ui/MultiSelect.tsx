@@ -12,6 +12,7 @@ const MultiSelect = ({
   placeholder = "Select...",
   maxVisible = 6,
   horsContractList,
+  onHorsContratChange,
 }: MultiSelectProps) => {
   const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -156,6 +157,7 @@ const MultiSelect = ({
                   onChange={(e) => {
                     const isChecked = e.target.checked;
                     setShowHorsContract(isChecked);
+                    onHorsContratChange?.(isChecked);
 
                     if (!isChecked) {
                       const horsSet = new Set(
