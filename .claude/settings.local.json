@@ -3,7 +3,8 @@
     "allow": [
       "Bash(npm install:*)",
       "Bash(npm run dev:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Read(//d/www/cubeDev/src/uiAssets/**)"
     ],
     "deny": [],
     "ask": []

@@ -48,6 +48,8 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedEnterprise, setSelectedEnterprise] =
     useState<MarketDataCompany | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const pageSize = 8;
 
   const horsContractList = useMemo(
     () => [
@@ -112,6 +114,15 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
     horsContractList,
   ]);
 
+  const totalPages = useMemo(() => {
+    return Math.max(1, Math.ceil(rows.length / pageSize));
+  }, [rows.length]);
+
+  const paginatedRows = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return rows.slice(start, start + pageSize);
+  }, [rows, currentPage]);
+
   return (
     <div className={styles.tableContainer}>
       <div className={styles.filtersBar}>
@@ -119,15 +130,20 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
           <MultiSelect
             options={companyNames.map((n) => ({ value: n, label: n }))}
             value={selectedCompanies}
-            onChange={setSelectedCompanies}
+            onChange={(values) => {
+              setSelectedCompanies(values);
+              setCurrentPage(1);
+            }}
             placeholder="Toutes les entreprises"
             horsContractList={horsContractList}
-            onHorsContratChange={setShowHorsContrat}
+            onHorsContratChange={(value) => {
+              setShowHorsContrat(value);
+              setCurrentPage(1);
+            }}
           />
         </div>
         <div className={styles.filtersRight}>
           <label className={styles.label}>
-            Trier par
             <select
               className={styles.select}
               value={sortKey}
@@ -139,6 +155,7 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
                   value === "date"
                 ) {
                   setSortKey(value);
+                  setCurrentPage(1);
                 }
               }}
             >
@@ -164,6 +181,7 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
               setSortKey("date");
               setSortDir("desc");
               setShowHorsContrat(false);
+              setCurrentPage(1);
             }}
             aria-label="Réinitialiser les filtres"
             title="Réinitialiser les filtres"
@@ -188,7 +206,7 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
               </td>
             </tr>
           ) : (
-            rows.map((enterprise) => {
+            paginatedRows.map((enterprise) => {
               const isHorsContrat = horsContractList.includes(
                 enterprise.name.toLowerCase()
               );
@@ -258,6 +276,36 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
           )}
         </tbody>
       </table>
+
+      {rows.length > 0 && (
+        <div className={styles.paginationWrapper}>
+          <div className={styles.paginationBar}>
+            <button
+              type="button"
+              className={styles.pageButton}
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              aria-label="Page précédente"
+              title="Page précédente"
+            >
+              Précédent
+            </button>
+            <span className={styles.pageInfo}>
+              Page {currentPage} / {totalPages}
+            </span>
+            <button
+              type="button"
+              className={styles.pageButton}
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              aria-label="Page suivante"
+              title="Page suivante"
+            >
+              Suivant
+            </button>
+          </div>
+        </div>
+      )}
 
       <Modal
         isOpen={isModalOpen}
