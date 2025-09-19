@@ -32,7 +32,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
 
   useEffect(() => {
     const savedLocale = localStorage.getItem("locale") as Locale;
-    if (savedLocale && (savedLocale === "en" || savedLocale === "fr")) {
+    if (savedLocale && ["en", "fr", "es", "pt", "it"].includes(savedLocale)) {
       setLocale(savedLocale);
     }
   }, []);

@@ -109,7 +109,7 @@ export const messages = {
     "filters.changeOrder": "Changer l'ordre de tri",
     "filters.ascending": "Ordre ascendant",
     "filters.descending": "Ordre descendant",
-    "filters.reset": "Reset",
+    "filters.reset": "Réinitialiser",
     "filters.resetFilters": "Réinitialiser les filtres",
 
     // Pagination
