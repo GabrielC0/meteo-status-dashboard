@@ -60,6 +60,10 @@ export const messages = {
     // Client page
     "client.dashboardStatus": "Dashboard Status",
     "client.titan": "TITAN",
+    "client.uptime": "Uptime",
+    "client.quality": "Quality",
+    "client.lastCheck": "Last check",
+    "client.lastUpdate": "Last update",
     "client.marketData": "Market Data",
 
     // MultiSelect component
@@ -137,6 +141,10 @@ export const messages = {
     // Client page
     "client.dashboardStatus": "Tableau de Bord",
     "client.titan": "TITAN",
+    "client.uptime": "Uptime",
+    "client.quality": "Qualité",
+    "client.lastCheck": "Dernière vérification",
+    "client.lastUpdate": "Dernière mise à jour",
     "client.marketData": "Données de Marché",
 
     // MultiSelect component
@@ -214,6 +222,10 @@ export const messages = {
     // Client page
     "client.dashboardStatus": "Panel de Control",
     "client.titan": "TITAN",
+    "client.uptime": "Tiempo activo",
+    "client.quality": "Calidad",
+    "client.lastCheck": "Última verificación",
+    "client.lastUpdate": "Última actualización",
     "client.marketData": "Datos de Mercado",
 
     // MultiSelect component
@@ -291,6 +303,10 @@ export const messages = {
     // Client page
     "client.dashboardStatus": "Painel de Controle",
     "client.titan": "TITAN",
+    "client.uptime": "Tempo ativo",
+    "client.quality": "Qualidade",
+    "client.lastCheck": "Última verificação",
+    "client.lastUpdate": "Última atualização",
     "client.marketData": "Dados de Mercado",
 
     // MultiSelect component
@@ -368,6 +384,10 @@ export const messages = {
     // Client page
     "client.dashboardStatus": "Pannello di Controllo",
     "client.titan": "TITAN",
+    "client.uptime": "Tempo attivo",
+    "client.quality": "Qualità",
+    "client.lastCheck": "Ultimo controllo",
+    "client.lastUpdate": "Ultimo aggiornamento",
     "client.marketData": "Dati di Mercato",
 
     // MultiSelect component
