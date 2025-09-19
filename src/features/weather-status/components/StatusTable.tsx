@@ -6,8 +6,10 @@ import Modal from "@/components/ui/Modal";
 import { MarketDataCompany } from "../types/index.types";
 import { useMemo, useState } from "react";
 import MultiSelect from "@/components/ui/MultiSelect";
+import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 import { isValidTableSortKey } from "@/types/table-sort.types";
 import { mapToMarketDataStatus } from "@/utils/status-mapping";
+import { useTranslations, useLanguage } from "@/i18n";
 
 import styles from "./StatusTable.module.css";
 import { SortKey } from "../types/index.types";
@@ -22,27 +24,6 @@ const excelDaysToMilliseconds = (excelDaysString: string): number => {
 
   return (
     Date.UTC(1899, 11, 30) + (excelDaysCount + 29221) * 24 * 60 * 60 * 1000
-  );
-};
-
-// Converts Excel serial date number to formatted date string
-const formatUpdateDate = (excelDaysString: string): string => {
-  const dateInMilliseconds = excelDaysToMilliseconds(excelDaysString);
-
-  if (dateInMilliseconds === 0) {
-    return "Date inconnue";
-  }
-
-  const formattedDate = new Date(dateInMilliseconds);
-
-  return (
-    formattedDate.toLocaleDateString("fr-FR", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    }) +
-    " à " +
-    formattedDate.toLocaleTimeString("fr-FR")
   );
 };
 
@@ -66,6 +47,8 @@ const StatusTable = ({
   setShowTooltip,
   getStatusColor,
 }: StatusTableProps) => {
+  const { translation } = useTranslations();
+  const { locale } = useLanguage();
   const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
   const [sortKey, setSortKey] = useState<SortKey>("date");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
@@ -75,6 +58,48 @@ const StatusTable = ({
     useState<MarketDataCompany | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const pageSize = 8;
+
+  // Converts Excel serial date number to formatted date string
+  const formatUpdateDate = (excelDaysString: string): string => {
+    const dateInMilliseconds = excelDaysToMilliseconds(excelDaysString);
+
+    if (dateInMilliseconds === 0) {
+      return translation("table.unknownDate");
+    }
+
+    const formattedDate = new Date(dateInMilliseconds);
+
+    return (
+      formattedDate.toLocaleDateString(
+        locale === "fr"
+          ? "fr-FR"
+          : locale === "es"
+          ? "es-ES"
+          : locale === "pt"
+          ? "pt-BR"
+          : locale === "it"
+          ? "it-IT"
+          : "en-US",
+        {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        }
+      ) +
+      " à " +
+      formattedDate.toLocaleTimeString(
+        locale === "fr"
+          ? "fr-FR"
+          : locale === "es"
+          ? "es-ES"
+          : locale === "pt"
+          ? "pt-BR"
+          : locale === "it"
+          ? "it-IT"
+          : "en-US"
+      )
+    );
+  };
 
   const horsContractList = useMemo(
     () => [
@@ -184,15 +209,40 @@ const StatusTable = ({
           </div>
 
           <div className={styles.titleSection}>
-            <h1 className={styles.glassTitle}>Dashboard Status</h1>
+            <h1 className={styles.glassTitle}>
+              {translation("dashboard.title")}
+            </h1>
           </div>
 
           <div className={styles.dateSection}>
             <span className={styles.lastUpdateValue}>
-              {titanService.lastCheck.toLocaleDateString("fr-FR")} à{" "}
-              {titanService.lastCheck.toLocaleTimeString("fr-FR")}
+              {titanService.lastCheck.toLocaleDateString(
+                locale === "fr"
+                  ? "fr-FR"
+                  : locale === "es"
+                  ? "es-ES"
+                  : locale === "pt"
+                  ? "pt-BR"
+                  : locale === "it"
+                  ? "it-IT"
+                  : "en-US"
+              )}{" "}
+              à{" "}
+              {titanService.lastCheck.toLocaleTimeString(
+                locale === "fr"
+                  ? "fr-FR"
+                  : locale === "es"
+                  ? "es-ES"
+                  : locale === "pt"
+                  ? "pt-BR"
+                  : locale === "it"
+                  ? "it-IT"
+                  : "en-US"
+              )}
             </span>
           </div>
+
+          <LanguageSwitcher />
         </div>
       )}
 
@@ -205,7 +255,7 @@ const StatusTable = ({
               setSelectedCompanies(values);
               setCurrentPage(1);
             }}
-            placeholder="Toutes les entreprises"
+            placeholder={translation("filters.allCompanies")}
             horsContractList={horsContractList}
             onHorsContratChange={(value) => {
               setShowHorsContrat(value);
@@ -226,17 +276,21 @@ const StatusTable = ({
                 }
               }}
             >
-              <option value="name">Nom</option>
-              <option value="status">Statut</option>
-              <option value="date">Dernière mise à jour</option>
+              <option value="name">{translation("filters.name")}</option>
+              <option value="status">{translation("filters.status")}</option>
+              <option value="date">{translation("filters.date")}</option>
             </select>
           </label>
           <button
             type="button"
             className={styles.sortButton}
             onClick={() => setSortDir((o) => (o === "asc" ? "desc" : "asc"))}
-            aria-label="Changer l'ordre de tri"
-            title={sortDir === "asc" ? "Ordre ascendant" : "Ordre descendant"}
+            aria-label={translation("filters.changeOrder")}
+            title={
+              sortDir === "asc"
+                ? translation("filters.ascending")
+                : translation("filters.descending")
+            }
           >
             {sortDir === "asc" ? "▲" : "▼"}
           </button>
@@ -250,26 +304,26 @@ const StatusTable = ({
               setShowHorsContrat(false);
               setCurrentPage(1);
             }}
-            aria-label="Réinitialiser les filtres"
-            title="Réinitialiser les filtres"
+            aria-label={translation("filters.resetFilters")}
+            title={translation("filters.resetFilters")}
           >
-            Reset
+            {translation("filters.reset")}
           </button>
         </div>
       </div>
       <table className={styles.statusTable}>
         <thead>
           <tr>
-            <th>Status</th>
-            <th>Entreprise</th>
-            <th>Dernière Mise à Jour</th>
+            <th>{translation("table.status")}</th>
+            <th>{translation("table.enterprise")}</th>
+            <th>{translation("table.lastUpdate")}</th>
           </tr>
         </thead>
         <tbody>
           {rows.length === 0 ? (
             <tr className={styles.emptyRow}>
               <td colSpan={3} className={styles.emptyMessage}>
-                Aucune entreprise configurée
+                {translation("table.noCompanies")}
               </td>
             </tr>
           ) : (
@@ -330,7 +384,8 @@ const StatusTable = ({
                         )}
                       </div>
                       <span className={styles.operationsCount}>
-                        ({enterprise.totalOperations} opérations)
+                        ({enterprise.totalOperations}{" "}
+                        {translation("table.operationsCount")})
                       </span>
                     </div>
                   </td>
@@ -352,23 +407,23 @@ const StatusTable = ({
               className={styles.pageButton}
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              aria-label="Page précédente"
-              title="Page précédente"
+              aria-label={translation("pagination.previousPage")}
+              title={translation("pagination.previousPage")}
             >
-              Précédent
+              {translation("pagination.previous")}
             </button>
             <span className={styles.pageInfo}>
-              Page {currentPage} / {totalPages}
+              {translation("pagination.page")} {currentPage} / {totalPages}
             </span>
             <button
               type="button"
               className={styles.pageButton}
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              aria-label="Page suivante"
-              title="Page suivante"
+              aria-label={translation("pagination.nextPage")}
+              title={translation("pagination.nextPage")}
             >
-              Suivant
+              {translation("pagination.next")}
             </button>
           </div>
         </div>
@@ -380,7 +435,9 @@ const StatusTable = ({
           setIsModalOpen(false);
           setSelectedEnterprise(null);
         }}
-        title={`Détails des opérations - ${selectedEnterprise?.name || ""}`}
+        title={`${translation("modal.operationDetails")} - ${
+          selectedEnterprise?.name || ""
+        }`}
       >
         {selectedEnterprise && (
           <div>
@@ -393,14 +450,15 @@ const StatusTable = ({
               }}
             >
               <p>
-                <strong>Nombre total d&apos;opérations:</strong>
+                <strong>{translation("modal.totalOperations")}</strong>
                 {selectedEnterprise.totalOperations}
               </p>
               <p>
-                <strong>Statut:</strong> {selectedEnterprise.marketDataStatus}
+                <strong>{translation("table.status")}:</strong>{" "}
+                {selectedEnterprise.marketDataStatus}
               </p>
               <p>
-                <strong>Dernière mise à jour:</strong>
+                <strong>{translation("table.lastUpdate")}:</strong>
                 {formatUpdateDate(selectedEnterprise.lastMarketDataUpdate)}
               </p>
             </div>
@@ -430,7 +488,7 @@ const StatusTable = ({
                       border: "1px solid #ddd",
                     }}
                   >
-                    Type d&apos;opération
+                    {translation("modal.operationType")}
                   </th>
                   <th
                     style={{
@@ -439,7 +497,7 @@ const StatusTable = ({
                       border: "1px solid #ddd",
                     }}
                   >
-                    Devise 1
+                    {translation("modal.currency1")}
                   </th>
                   <th
                     style={{
@@ -448,7 +506,7 @@ const StatusTable = ({
                       border: "1px solid #ddd",
                     }}
                   >
-                    Devise 2
+                    {translation("modal.currency2")}
                   </th>
                   <th
                     style={{
@@ -457,7 +515,7 @@ const StatusTable = ({
                       border: "1px solid #ddd",
                     }}
                   >
-                    Type récupération
+                    {translation("modal.recoveryType")}
                   </th>
                   <th
                     style={{
@@ -466,7 +524,7 @@ const StatusTable = ({
                       border: "1px solid #ddd",
                     }}
                   >
-                    Dernière MàJ
+                    {translation("modal.lastUpdate")}
                   </th>
                 </tr>
               </thead>

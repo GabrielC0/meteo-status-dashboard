@@ -1,4 +1,5 @@
 import "./globals.css";
+import { LanguageProvider } from "@/i18n";
 
 const RootLayout = ({
   children,
@@ -8,7 +9,7 @@ const RootLayout = ({
   return (
     <html lang="fr">
       <body>
-        {children}
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   );

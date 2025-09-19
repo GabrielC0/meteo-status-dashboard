@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { MultiSelectProps } from "@/types/multi-select.types";
+import { useTranslations } from "@/i18n";
 import styles from "./MultiSelect.module.css";
 
 const MultiSelect = ({
@@ -14,6 +15,7 @@ const MultiSelect = ({
   horsContractList,
   onHorsContratChange,
 }: MultiSelectProps) => {
+  const { translation } = useTranslations();
   const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -134,7 +136,7 @@ const MultiSelect = ({
             <input
               className={styles.searchInput}
               type="text"
-              placeholder="Rechercher..."
+              placeholder={translation("multiselect.search")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -149,7 +151,7 @@ const MultiSelect = ({
                 setSearchTerm("");
               }}
             >
-              Effacer
+              {translation("multiselect.clear")}
             </button>
             {horsContractList && (
               <label className={styles.horsLabel}>
@@ -172,7 +174,7 @@ const MultiSelect = ({
                     }
                   }}
                 />
-                <span>Hors contrat</span>
+                <span>{translation("multiselect.outOfContract")}</span>
               </label>
             )}
           </div>
@@ -205,7 +207,9 @@ const MultiSelect = ({
                   <input type="checkbox" readOnly checked={checked} />
                   <span className={styles.optionLabel}>{o.label}</span>
                   {isHors && (
-                    <span className={styles.horsMeta}>(Hors contrat)</span>
+                    <span className={styles.horsMeta}>
+                      ({translation("multiselect.outOfContract")})
+                    </span>
                   )}
                 </div>
               );
