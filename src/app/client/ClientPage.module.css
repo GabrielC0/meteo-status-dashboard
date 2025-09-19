@@ -67,12 +67,15 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   background-color: transparent;
   margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .tableHeader h2 {
   display: block;
-  text-align: center;
-  margin: 8px auto 6px auto;
+  text-align: left;
+  margin: 8px 0 6px 0;
   padding: 0;
   color: #ffffff;
   font-size: 1.35rem;
