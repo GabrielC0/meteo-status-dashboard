@@ -11,6 +11,109 @@
   -webkit-backdrop-filter: blur(6px);
 }
 
+.titanStatusBubble {
+  padding: 12px 16px;
+  border: none;
+  vertical-align: middle;
+  background: transparent;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.statusSection {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.titleSection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.dateSection {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.bubbleTitle {
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.bubbleIcon {
+  font-size: 1.5rem;
+  line-height: 1;
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.lastUpdateValue {
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.tooltipArrow {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid;
+}
+
+.glassTitle {
+  display: block;
+  text-align: center;
+  margin: 8px auto 6px auto;
+  padding: 0;
+  color: #ffffff;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  background: transparent;
+  border-radius: 0;
+}
+
 .filtersBar {
   display: flex;
   align-items: center;

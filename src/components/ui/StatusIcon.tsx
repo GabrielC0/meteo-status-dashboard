@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { MarketDataStatus } from "@/features/weather-status/types/index.types";
 import { StatusIcons } from "@/components/icons";
 import { Tooltip } from "react-tooltip";
@@ -12,9 +13,22 @@ export interface IconProps {
 interface StatusIconProps {
   status: MarketDataStatus;
   size?: "small" | "medium" | "large";
+  showTooltip?: boolean;
 }
 
-const StatusIcon = ({ status, size = "medium" }: StatusIconProps) => {
+const StatusIcon = ({
+  status,
+  size = "medium",
+  showTooltip = true,
+}: StatusIconProps) => {
+  const [tooltipId, setTooltipId] = useState<string>("");
+
+  useEffect(() => {
+    setTooltipId(
+      `status-tooltip-${status}-${Math.random().toString(36).slice(2, 11)}`
+    );
+  }, [status]);
+
   const sizeConfig = {
     small: { width: 16, height: 16 },
     medium: { width: 20, height: 20 },
@@ -39,16 +53,13 @@ const StatusIcon = ({ status, size = "medium" }: StatusIconProps) => {
   const statusClass = styles[`icon${status}`];
   const sizeClass = styles[size];
   const className = `${statusClass} ${sizeClass}`;
-  const tooltipId = `status-tooltip-${status}-${Math.random()
-    .toString(36)
-    .slice(2, 11)}`;
 
   const IconComponent = StatusIcons[status];
 
   return (
     <>
       <div
-        data-tooltip-id={tooltipId}
+        data-tooltip-id={tooltipId || undefined}
         style={{ display: "inline-block", cursor: "default" }}
       >
         <IconComponent
@@ -57,21 +68,23 @@ const StatusIcon = ({ status, size = "medium" }: StatusIconProps) => {
           className={className}
         />
       </div>
-      <Tooltip
-        id={tooltipId}
-        content={statusLabels[status]}
-        place="top"
-        style={{
-          backgroundColor: statusColors[status],
-          color: "#fff",
-          borderRadius: "6px",
-          padding: "8px 12px",
-          fontSize: "14px",
-          fontWeight: "500",
-          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.15)",
-          zIndex: 1000,
-        }}
-      />
+      {tooltipId && showTooltip && (
+        <Tooltip
+          id={tooltipId}
+          content={statusLabels[status]}
+          place="top"
+          style={{
+            backgroundColor: statusColors[status],
+            color: "#fff",
+            borderRadius: "6px",
+            padding: "8px 12px",
+            fontSize: "14px",
+            fontWeight: "500",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.15)",
+            zIndex: 1000,
+          }}
+        />
+      )}
     </>
   );
 };

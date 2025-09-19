@@ -23,7 +23,7 @@
 }
 .overflowText {
   display: inline-block;
-  max-width: calc(100% - 20px); 
+  max-width: calc(100% - 20px);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -39,6 +39,10 @@
   transform: translateY(-50%);
   line-height: 1;
   pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
 }
 
 .panel {

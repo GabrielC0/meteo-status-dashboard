@@ -6,6 +6,8 @@ import Modal from "@/components/ui/Modal";
 import { MarketDataCompany } from "../types/index.types";
 import { useMemo, useState } from "react";
 import MultiSelect from "@/components/ui/MultiSelect";
+import { isValidTableSortKey } from "@/types/table-sort.types";
+import { mapToMarketDataStatus } from "@/utils/status-mapping";
 
 import styles from "./StatusTable.module.css";
 import { SortKey } from "../types/index.types";
@@ -33,14 +35,37 @@ const formatUpdateDate = (excelDaysString: string): string => {
 
   const formattedDate = new Date(dateInMilliseconds);
 
-  return formattedDate.toLocaleDateString("fr-FR", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  });
+  return (
+    formattedDate.toLocaleDateString("fr-FR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }) +
+    " à " +
+    formattedDate.toLocaleTimeString("fr-FR")
+  );
 };
 
-const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
+interface StatusTableProps {
+  enterprises: MarketDataCompany[];
+  titanService?: {
+    status: string;
+    lastCheck: Date;
+  };
+  showTooltip?: boolean;
+  setShowTooltip?: (show: boolean) => void;
+  getStatusIcon?: (status: string) => string;
+  getStatusColor?: (status: string) => string;
+  getStatusText?: (status: string) => string;
+}
+
+const StatusTable = ({
+  enterprises,
+  titanService,
+  showTooltip,
+  setShowTooltip,
+  getStatusColor,
+}: StatusTableProps) => {
   const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
   const [sortKey, setSortKey] = useState<SortKey>("date");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
@@ -125,6 +150,52 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
 
   return (
     <div className={styles.tableContainer}>
+      {titanService && (
+        <div className={styles.titanStatusBubble}>
+          <div className={styles.statusSection}>
+            <div
+              className={styles.bubbleIcon}
+              onMouseEnter={() => setShowTooltip?.(true)}
+              onMouseLeave={() => setShowTooltip?.(false)}
+            >
+              <StatusIcon
+                status={mapToMarketDataStatus(titanService.status)}
+                size="large"
+                showTooltip={false}
+              />
+              {showTooltip && (
+                <div
+                  className={styles.tooltip}
+                  style={{
+                    backgroundColor: getStatusColor?.(titanService.status),
+                  }}
+                >
+                  Success
+                  <div
+                    className={styles.tooltipArrow}
+                    style={{
+                      borderTopColor: getStatusColor?.(titanService.status),
+                    }}
+                  ></div>
+                </div>
+              )}
+            </div>
+            <h3 className={styles.bubbleTitle}>TITAN</h3>
+          </div>
+
+          <div className={styles.titleSection}>
+            <h1 className={styles.glassTitle}>Dashboard Status</h1>
+          </div>
+
+          <div className={styles.dateSection}>
+            <span className={styles.lastUpdateValue}>
+              {titanService.lastCheck.toLocaleDateString("fr-FR")} à{" "}
+              {titanService.lastCheck.toLocaleTimeString("fr-FR")}
+            </span>
+          </div>
+        </div>
+      )}
+
       <div className={styles.filtersBar}>
         <div className={styles.filtersLeft}>
           <MultiSelect
@@ -149,11 +220,7 @@ const StatusTable = ({ enterprises }: { enterprises: MarketDataCompany[] }) => {
               value={sortKey}
               onChange={(e) => {
                 const value = e.target.value;
-                if (
-                  value === "name" ||
-                  value === "status" ||
-                  value === "date"
-                ) {
+                if (isValidTableSortKey(value)) {
                   setSortKey(value);
                   setCurrentPage(1);
                 }
