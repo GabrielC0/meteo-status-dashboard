@@ -12,7 +12,7 @@ export const ClientLogoIcon = ({
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     preserveAspectRatio="xMidYMid meet"
-    style={{ pointerEvents: "none" }}
+    style={{ pointerEvents: 'none' }}
     className="loginPage__cubeLogoBackground"
   >
     <g clipPath="url(#clip0_278_564)">

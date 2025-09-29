@@ -1,4 +1,4 @@
-import { IconProps } from "../ui/StatusIcon";
+import { IconProps } from '../ui/StatusIcon';
 
 const NoContractIcon = ({ width = 16, height = 16, className }: IconProps) => {
   return (

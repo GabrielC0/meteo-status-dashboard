@@ -21,6 +21,6 @@ export interface MarketDataSummary {
   totalOperations: number;
   dataTypes: string[];
   lastUpdate: Date;
-  status: "SUCCESS" | "WARNING" | "ERROR" | "UNKNOWN";
+  status: 'SUCCESS' | 'WARNING' | 'ERROR' | 'UNKNOWN';
   errorMessage?: string;
 }

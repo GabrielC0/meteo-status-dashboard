@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 
-import { MultiSelectProps } from "@/types/MultiSelect.types";
-import { useTranslations } from "@/i18n";
-import styles from "@/styles/components/ui/MultiSelect.module.scss";
+import { MultiSelectProps } from '@/types/MultiSelect.types';
+import { useTranslations } from '@/i18n';
+import styles from '@/styles/components/ui/MultiSelect.module.scss';
 
 const MultiSelect = ({
   options,
   value,
   onChange,
-  placeholder = "Select...",
+  placeholder = 'Select...',
   maxVisible = 6,
   horsContractList,
   onHorsContratChange,
 }: MultiSelectProps) => {
   const { translation } = useTranslations();
   const [open, setOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const rootRef = useRef<HTMLDivElement | null>(null);
   const triggerRef = useRef<HTMLDivElement | null>(null);
   const [panelPos, setPanelPos] = useState<{
@@ -34,9 +34,9 @@ const MultiSelect = ({
       if (target instanceof Node && !rootRef.current.contains(target)) setOpen(false);
     };
 
-    document.addEventListener("mousedown", onDocClick);
+    document.addEventListener('mousedown', onDocClick);
 
-    return () => document.removeEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener('mousedown', onDocClick);
   }, []);
 
   useEffect(() => {
@@ -59,12 +59,12 @@ const MultiSelect = ({
       setPanelPos({ top: r.bottom + 6, left: r.left, minWidth: r.width });
     };
 
-    window.addEventListener("resize", onResize);
-    window.addEventListener("scroll", onResize, true);
+    window.addEventListener('resize', onResize);
+    window.addEventListener('scroll', onResize, true);
 
     return () => {
-      window.removeEventListener("resize", onResize);
-      window.removeEventListener("scroll", onResize, true);
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('scroll', onResize, true);
     };
   }, [open]);
 
@@ -92,11 +92,11 @@ const MultiSelect = ({
         ref={triggerRef}
         onClick={() => setOpen((v) => !v)}
         onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
+          if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             setOpen((v) => !v);
           }
-          if (e.key === "Escape") setOpen(false);
+          if (e.key === 'Escape') setOpen(false);
         }}
         aria-haspopup="listbox"
         aria-expanded={open}
@@ -108,9 +108,9 @@ const MultiSelect = ({
           ) : (
             <span
               className={styles.overflowText}
-              title={selectedOptions.map((o) => o.label).join(", ")}
+              title={selectedOptions.map((o) => o.label).join(', ')}
             >
-              {selectedOptions.map((o) => o.label).join(", ")}
+              {selectedOptions.map((o) => o.label).join(', ')}
             </span>
           )}
           <span className={styles.chevron}>⌄</span>
@@ -121,7 +121,7 @@ const MultiSelect = ({
           className={styles.panel}
           role="listbox"
           style={{
-            position: "fixed",
+            position: 'fixed',
             top: panelPos?.top,
             left: panelPos?.left,
             minWidth: panelPos?.minWidth,
@@ -131,7 +131,7 @@ const MultiSelect = ({
             <input
               className={styles.searchInput}
               type="text"
-              placeholder={translation("multiselect.search")}
+              placeholder={translation('multiselect.search')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -143,10 +143,10 @@ const MultiSelect = ({
               onMouseDown={(e) => {
                 e.preventDefault();
                 onChange([]);
-                setSearchTerm("");
+                setSearchTerm('');
               }}
             >
-              {translation("multiselect.clear")}
+              {translation('multiselect.clear')}
             </button>
             {horsContractList && (
               <label className={styles.horsLabel}>
@@ -165,7 +165,7 @@ const MultiSelect = ({
                     }
                   }}
                 />
-                <span>{translation("multiselect.outOfContract")}</span>
+                <span>{translation('multiselect.outOfContract')}</span>
               </label>
             )}
           </div>
@@ -194,7 +194,7 @@ const MultiSelect = ({
                   <span className={styles.optionLabel}>{o.label}</span>
                   {isHors && (
                     <span className={styles.horsMeta}>
-                      ({translation("multiselect.outOfContract")})
+                      ({translation('multiselect.outOfContract')})
                     </span>
                   )}
                 </div>
@@ -207,6 +207,6 @@ const MultiSelect = ({
   );
 };
 
-MultiSelect.displayName = "Ui.MultiSelect";
+MultiSelect.displayName = 'Ui.MultiSelect';
 
 export default memo(MultiSelect);

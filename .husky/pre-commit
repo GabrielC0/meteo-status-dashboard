@@ -1,1 +1,9 @@
+echo "Running pre-commit checks..."
+
+npx prettier . --check || exit 1
+npx eslint . || exit 1
+npx stylelint "src/**/*.{css,scss}" || exit 1
+npx vitest --run || exit 1
+
+echo "All checks passed."
 npm run lint && npm run -s prettier -- -c . && npm run -s stylelint

@@ -1,7 +1,7 @@
-import { ReactNode } from "react";
-import Header from "./Header";
+import { ReactNode } from 'react';
+import Header from './Header';
 
-import styles from "./Layout.module.scss";
+import styles from './Layout.module.scss';
 
 interface LayoutProps {
   children: ReactNode;
@@ -11,7 +11,7 @@ interface LayoutProps {
 
 const Layout = ({
   children,
-  title = "Weather Status Dashboard",
+  title = 'Weather Status Dashboard',
   hideHeader = false,
 }: LayoutProps) => {
   return (

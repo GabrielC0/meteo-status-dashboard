@@ -1,3 +1,10 @@
+.next
+node_modules
+coverage
+dist
+out
+build
+public
 node_modules
 .next
 out

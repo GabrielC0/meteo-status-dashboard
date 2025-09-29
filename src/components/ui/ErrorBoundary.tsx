@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
 type ErrorBoundaryProps = React.PropsWithChildren<{
   fallback?: React.ReactNode;
@@ -20,7 +20,10 @@ export default class ErrorBoundary extends React.Component<ErrorBoundaryProps, E
     return { hasError: true };
   }
 
-  componentDidCatch(): void {}
+  componentDidCatch(_error: unknown, _errorInfo: unknown): void {
+    // Relai minimal: remplacez par un logger distant (Sentry, Logtail, etc.)
+    // console.error('ErrorBoundary caught:', error, errorInfo);
+  }
 
   render(): React.ReactNode {
     if (this.state.hasError) {

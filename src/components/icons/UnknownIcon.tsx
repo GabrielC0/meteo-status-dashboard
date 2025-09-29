@@ -1,4 +1,4 @@
-import { IconProps } from "../ui/StatusIcon";
+import { IconProps } from '../ui/StatusIcon';
 
 const UnknownIcon = ({ width = 20, height = 20, className }: IconProps) => {
   return (

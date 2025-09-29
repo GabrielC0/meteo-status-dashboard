@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import StatusIcon from "@/components/ui/StatusIcon";
-import NoContractIcon from "@/components/icons/NoContractIcon";
-import Modal from "@/components/ui/Modal";
-import { MarketDataCompany } from "../types/Index.types";
-import { useMemo, useState } from "react";
-import MultiSelect from "@/components/ui/MultiSelect";
-import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
-import { isValidTableSortKey } from "@/types/TableSort.types";
-import { mapToMarketDataStatus } from "@/utils/status-mapping";
-import { useTranslations, useLanguage } from "@/i18n";
+import StatusIcon from '@/components/ui/StatusIcon';
+import NoContractIcon from '@/components/icons/NoContractIcon';
+import Modal from '@/components/ui/Modal';
+import { MarketDataCompany } from '../types/Index.types';
+import { useMemo, useState } from 'react';
+import MultiSelect from '@/components/ui/MultiSelect';
+import LanguageSwitcher from '@/components/ui/LanguageSwitcher';
+import { isValidTableSortKey } from '@/types/TableSort.types';
+import { mapToMarketDataStatus } from '@/utils/status-mapping';
+import { useTranslations, useLanguage } from '@/i18n';
 
-import styles from "@/styles/features/weather-status/components/StatusTable.module.scss";
-import { SortKey } from "../types/Index.types";
+import styles from '@/styles/features/weather-status/components/StatusTable.module.scss';
+import { SortKey } from '../types/Index.types';
 
 // Converts Excel serial date number to milliseconds
 const excelDaysToMilliseconds = (excelDaysString: string): number => {
@@ -50,8 +50,8 @@ const StatusTable = ({
   const { translation } = useTranslations();
   const { locale } = useLanguage();
   const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
-  const [sortKey, setSortKey] = useState<SortKey>("date");
-  const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
+  const [sortKey, setSortKey] = useState<SortKey>('date');
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
   const [showHorsContrat, setShowHorsContrat] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedEnterprise, setSelectedEnterprise] = useState<MarketDataCompany | null>(null);
@@ -63,55 +63,55 @@ const StatusTable = ({
     const dateInMilliseconds = excelDaysToMilliseconds(excelDaysString);
 
     if (dateInMilliseconds === 0) {
-      return translation("table.unknownDate");
+      return translation('table.unknownDate');
     }
 
     const formattedDate = new Date(dateInMilliseconds);
 
     return (
       formattedDate.toLocaleDateString(
-        locale === "fr"
-          ? "fr-FR"
-          : locale === "es"
-            ? "es-ES"
-            : locale === "pt"
-              ? "pt-BR"
-              : locale === "it"
-                ? "it-IT"
-                : "en-US",
+        locale === 'fr'
+          ? 'fr-FR'
+          : locale === 'es'
+            ? 'es-ES'
+            : locale === 'pt'
+              ? 'pt-BR'
+              : locale === 'it'
+                ? 'it-IT'
+                : 'en-US',
         {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
         },
       ) +
-      " à " +
+      ' à ' +
       formattedDate.toLocaleTimeString(
-        locale === "fr"
-          ? "fr-FR"
-          : locale === "es"
-            ? "es-ES"
-            : locale === "pt"
-              ? "pt-BR"
-              : locale === "it"
-                ? "it-IT"
-                : "en-US",
+        locale === 'fr'
+          ? 'fr-FR'
+          : locale === 'es'
+            ? 'es-ES'
+            : locale === 'pt'
+              ? 'pt-BR'
+              : locale === 'it'
+                ? 'it-IT'
+                : 'en-US',
       )
     );
   };
 
   const horsContractList = useMemo(
     () => [
-      "adp",
-      "agache",
-      "biomerieux",
-      "bonduelle",
-      "carrefour",
-      "crca",
-      "gdf",
-      "ivanhoe",
-      "seb",
-      "vinciconstruction",
+      'adp',
+      'agache',
+      'biomerieux',
+      'bonduelle',
+      'carrefour',
+      'crca',
+      'gdf',
+      'ivanhoe',
+      'seb',
+      'vinciconstruction',
     ],
     [],
   );
@@ -145,7 +145,7 @@ const StatusTable = ({
 
     const sorted = [...filteredByCompany].sort((a, b) => {
       const cmp = comparatorBy[sortKey](a, b);
-      return sortDir === "asc" ? cmp : -cmp;
+      return sortDir === 'asc' ? cmp : -cmp;
     });
 
     return sorted;
@@ -196,33 +196,33 @@ const StatusTable = ({
           </div>
 
           <div className={styles.titleSection}>
-            <h1 className={styles.glassTitle}>{translation("dashboard.title")}</h1>
+            <h1 className={styles.glassTitle}>{translation('dashboard.title')}</h1>
           </div>
 
           <div className={styles.dateSection}>
             <span className={styles.lastUpdateValue}>
               {titanService.lastCheck.toLocaleDateString(
-                locale === "fr"
-                  ? "fr-FR"
-                  : locale === "es"
-                    ? "es-ES"
-                    : locale === "pt"
-                      ? "pt-BR"
-                      : locale === "it"
-                        ? "it-IT"
-                        : "en-US",
-              )}{" "}
-              à{" "}
+                locale === 'fr'
+                  ? 'fr-FR'
+                  : locale === 'es'
+                    ? 'es-ES'
+                    : locale === 'pt'
+                      ? 'pt-BR'
+                      : locale === 'it'
+                        ? 'it-IT'
+                        : 'en-US',
+              )}{' '}
+              à{' '}
               {titanService.lastCheck.toLocaleTimeString(
-                locale === "fr"
-                  ? "fr-FR"
-                  : locale === "es"
-                    ? "es-ES"
-                    : locale === "pt"
-                      ? "pt-BR"
-                      : locale === "it"
-                        ? "it-IT"
-                        : "en-US",
+                locale === 'fr'
+                  ? 'fr-FR'
+                  : locale === 'es'
+                    ? 'es-ES'
+                    : locale === 'pt'
+                      ? 'pt-BR'
+                      : locale === 'it'
+                        ? 'it-IT'
+                        : 'en-US',
               )}
             </span>
           </div>
@@ -240,7 +240,7 @@ const StatusTable = ({
               setSelectedCompanies(values);
               setCurrentPage(1);
             }}
-            placeholder={translation("filters.allCompanies")}
+            placeholder={translation('filters.allCompanies')}
             horsContractList={horsContractList}
             onHorsContratChange={(value) => {
               setShowHorsContrat(value);
@@ -261,47 +261,47 @@ const StatusTable = ({
                 }
               }}
             >
-              <option value="name">{translation("filters.name")}</option>
-              <option value="status">{translation("filters.status")}</option>
-              <option value="date">{translation("filters.date")}</option>
+              <option value="name">{translation('filters.name')}</option>
+              <option value="status">{translation('filters.status')}</option>
+              <option value="date">{translation('filters.date')}</option>
             </select>
           </label>
           <button
             type="button"
             className={styles.sortButton}
-            onClick={() => setSortDir((o) => (o === "asc" ? "desc" : "asc"))}
-            aria-label={translation("filters.changeOrder")}
+            onClick={() => setSortDir((o) => (o === 'asc' ? 'desc' : 'asc'))}
+            aria-label={translation('filters.changeOrder')}
             title={
-              sortDir === "asc"
-                ? translation("filters.ascending")
-                : translation("filters.descending")
+              sortDir === 'asc'
+                ? translation('filters.ascending')
+                : translation('filters.descending')
             }
           >
-            {sortDir === "asc" ? "▲" : "▼"}
+            {sortDir === 'asc' ? '▲' : '▼'}
           </button>
           <button
             type="button"
             className={styles.sortButton}
             onClick={() => {
               setSelectedCompanies([]);
-              setSortKey("date");
-              setSortDir("desc");
+              setSortKey('date');
+              setSortDir('desc');
               setShowHorsContrat(false);
               setCurrentPage(1);
             }}
-            aria-label={translation("filters.resetFilters")}
-            title={translation("filters.resetFilters")}
+            aria-label={translation('filters.resetFilters')}
+            title={translation('filters.resetFilters')}
           >
-            {translation("filters.reset")}
+            {translation('filters.reset')}
           </button>
         </div>
       </div>
       <table className={styles.statusTable}>
         <thead>
           <tr>
-            <th>{translation("table.status")}</th>
-            <th>{translation("table.enterprise")}</th>
-            <th>{translation("table.lastUpdate")}</th>
+            <th>{translation('table.status')}</th>
+            <th>{translation('table.enterprise')}</th>
+            <th>{translation('table.lastUpdate')}</th>
           </tr>
         </thead>
         <tbody>
@@ -314,7 +314,7 @@ const StatusTable = ({
           ) : rows.length === 0 ? (
             <tr className={styles.emptyRow}>
               <td colSpan={3} className={styles.emptyMessage}>
-                {translation("table.noCompanies")}
+                {translation('table.noCompanies')}
               </td>
             </tr>
           ) : (
@@ -329,16 +329,16 @@ const StatusTable = ({
                   <td className={styles.serviceName}>
                     <div
                       style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "flex-start",
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
                       }}
                     >
                       <div
                         style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "8px",
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
                         }}
                       >
                         <span
@@ -348,15 +348,15 @@ const StatusTable = ({
                           }}
                           onMouseDown={(e) => e.preventDefault()}
                           style={{
-                            cursor: "pointer",
-                            userSelect: "none",
-                            transition: "color 0.2s ease",
+                            cursor: 'pointer',
+                            userSelect: 'none',
+                            transition: 'color 0.2s ease',
                           }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.color = "#007acc";
+                            e.currentTarget.style.color = '#007acc';
                           }}
                           onMouseLeave={(e) => {
-                            e.currentTarget.style.color = "inherit";
+                            e.currentTarget.style.color = 'inherit';
                           }}
                         >
                           {enterprise.name}
@@ -370,7 +370,7 @@ const StatusTable = ({
                         )}
                       </div>
                       <span className={styles.operationsCount}>
-                        ({enterprise.totalOperations} {translation("table.operationsCount")})
+                        ({enterprise.totalOperations} {translation('table.operationsCount')})
                       </span>
                     </div>
                   </td>
@@ -392,23 +392,23 @@ const StatusTable = ({
               className={styles.pageButton}
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              aria-label={translation("pagination.previousPage")}
-              title={translation("pagination.previousPage")}
+              aria-label={translation('pagination.previousPage')}
+              title={translation('pagination.previousPage')}
             >
-              {translation("pagination.previous")}
+              {translation('pagination.previous')}
             </button>
             <span className={styles.pageInfo}>
-              {translation("pagination.page")} {currentPage} / {totalPages}
+              {translation('pagination.page')} {currentPage} / {totalPages}
             </span>
             <button
               type="button"
               className={styles.pageButton}
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              aria-label={translation("pagination.nextPage")}
-              title={translation("pagination.nextPage")}
+              aria-label={translation('pagination.nextPage')}
+              title={translation('pagination.nextPage')}
             >
-              {translation("pagination.next")}
+              {translation('pagination.next')}
             </button>
           </div>
         </div>
@@ -420,94 +420,94 @@ const StatusTable = ({
           setIsModalOpen(false);
           setSelectedEnterprise(null);
         }}
-        title={`${translation("modal.operationDetails")} - ${selectedEnterprise?.name || ""}`}
+        title={`${translation('modal.operationDetails')} - ${selectedEnterprise?.name || ''}`}
       >
         {selectedEnterprise && (
           <div>
             <div
               style={{
-                marginBottom: "20px",
-                padding: "16px",
-                backgroundColor: "#f8f9fa",
-                borderRadius: "8px",
+                marginBottom: '20px',
+                padding: '16px',
+                backgroundColor: '#f8f9fa',
+                borderRadius: '8px',
               }}
             >
               <p>
-                <strong>{translation("modal.totalOperations")}</strong>
+                <strong>{translation('modal.totalOperations')}</strong>
                 {selectedEnterprise.totalOperations}
               </p>
               <p>
-                <strong>{translation("table.status")}:</strong>{" "}
+                <strong>{translation('table.status')}:</strong>{' '}
                 {selectedEnterprise.marketDataStatus}
               </p>
               <p>
-                <strong>{translation("table.lastUpdate")}:</strong>
+                <strong>{translation('table.lastUpdate')}:</strong>
                 {formatUpdateDate(selectedEnterprise.lastMarketDataUpdate)}
               </p>
             </div>
 
             <table
               style={{
-                width: "100%",
-                borderCollapse: "collapse",
-                fontSize: "14px",
+                width: '100%',
+                borderCollapse: 'collapse',
+                fontSize: '14px',
               }}
             >
               <thead>
-                <tr style={{ backgroundColor: "#f1f3f4" }}>
+                <tr style={{ backgroundColor: '#f1f3f4' }}>
                   <th
                     style={{
-                      padding: "12px",
-                      textAlign: "left",
-                      border: "1px solid #ddd",
+                      padding: '12px',
+                      textAlign: 'left',
+                      border: '1px solid #ddd',
                     }}
                   >
                     #
                   </th>
                   <th
                     style={{
-                      padding: "12px",
-                      textAlign: "left",
-                      border: "1px solid #ddd",
+                      padding: '12px',
+                      textAlign: 'left',
+                      border: '1px solid #ddd',
                     }}
                   >
-                    {translation("modal.operationType")}
+                    {translation('modal.operationType')}
                   </th>
                   <th
                     style={{
-                      padding: "12px",
-                      textAlign: "left",
-                      border: "1px solid #ddd",
+                      padding: '12px',
+                      textAlign: 'left',
+                      border: '1px solid #ddd',
                     }}
                   >
-                    {translation("modal.currency1")}
+                    {translation('modal.currency1')}
                   </th>
                   <th
                     style={{
-                      padding: "12px",
-                      textAlign: "left",
-                      border: "1px solid #ddd",
+                      padding: '12px',
+                      textAlign: 'left',
+                      border: '1px solid #ddd',
                     }}
                   >
-                    {translation("modal.currency2")}
+                    {translation('modal.currency2')}
                   </th>
                   <th
                     style={{
-                      padding: "12px",
-                      textAlign: "left",
-                      border: "1px solid #ddd",
+                      padding: '12px',
+                      textAlign: 'left',
+                      border: '1px solid #ddd',
                     }}
                   >
-                    {translation("modal.recoveryType")}
+                    {translation('modal.recoveryType')}
                   </th>
                   <th
                     style={{
-                      padding: "12px",
-                      textAlign: "left",
-                      border: "1px solid #ddd",
+                      padding: '12px',
+                      textAlign: 'left',
+                      border: '1px solid #ddd',
                     }}
                   >
-                    {translation("modal.lastUpdate")}
+                    {translation('modal.lastUpdate')}
                   </th>
                 </tr>
               </thead>
@@ -516,29 +516,29 @@ const StatusTable = ({
                   <tr
                     key={index}
                     style={{
-                      backgroundColor: index % 2 === 0 ? "#ffffff" : "#f9f9f9",
+                      backgroundColor: index % 2 === 0 ? '#ffffff' : '#f9f9f9',
                     }}
                   >
-                    <td style={{ padding: "10px", border: "1px solid #ddd" }}>{index + 1}</td>
+                    <td style={{ padding: '10px', border: '1px solid #ddd' }}>{index + 1}</td>
                     <td
                       style={{
-                        padding: "10px",
-                        border: "1px solid #ddd",
-                        fontWeight: "bold",
+                        padding: '10px',
+                        border: '1px solid #ddd',
+                        fontWeight: 'bold',
                       }}
                     >
                       {operation.operationType}
                     </td>
-                    <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                    <td style={{ padding: '10px', border: '1px solid #ddd' }}>
                       {operation.devise1}
                     </td>
-                    <td style={{ padding: "10px", border: "1px solid #ddd" }}>
-                      {operation.devise2 || "-"}
+                    <td style={{ padding: '10px', border: '1px solid #ddd' }}>
+                      {operation.devise2 || '-'}
                     </td>
-                    <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                    <td style={{ padding: '10px', border: '1px solid #ddd' }}>
                       {operation.typeRecuperation}
                     </td>
-                    <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                    <td style={{ padding: '10px', border: '1px solid #ddd' }}>
                       {formatUpdateDate(operation.lastMarketDataUpdate)}
                     </td>
                   </tr>

@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { ReactNode, useEffect } from "react";
-import styles from "@/styles/components/ui/Modal.module.scss";
+import { ReactNode, useEffect } from 'react';
+import styles from '@/styles/components/ui/Modal.module.scss';
 
 interface ModalProps {
   isOpen: boolean;
@@ -13,12 +13,12 @@ interface ModalProps {
 const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = "hidden";
-      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
 
       const preventBackgroundScroll = (e: WheelEvent) => {
         const target = e.target;
-        const modal = document.querySelector("[data-modal-content]");
+        const modal = document.querySelector('[data-modal-content]');
 
         if (modal && target instanceof Node && !modal.contains(target)) {
           e.preventDefault();
@@ -26,18 +26,18 @@ const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
         }
       };
 
-      document.addEventListener("wheel", preventBackgroundScroll, {
+      document.addEventListener('wheel', preventBackgroundScroll, {
         passive: false,
       });
 
       return () => {
-        document.body.style.overflow = "unset";
-        document.documentElement.style.overflow = "unset";
-        document.removeEventListener("wheel", preventBackgroundScroll);
+        document.body.style.overflow = 'unset';
+        document.documentElement.style.overflow = 'unset';
+        document.removeEventListener('wheel', preventBackgroundScroll);
       };
     } else {
-      document.body.style.overflow = "unset";
-      document.documentElement.style.overflow = "unset";
+      document.body.style.overflow = 'unset';
+      document.documentElement.style.overflow = 'unset';
     }
   }, [isOpen]);
 

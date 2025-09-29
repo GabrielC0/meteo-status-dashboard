@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   titanServices,
@@ -6,14 +6,14 @@ import {
   getPercentageColor,
   getStatusColor,
   getStatusText,
-} from "@/data/clientData";
-import { ClientLogoIcon } from "@/components/icons/LogoIcon";
-import StatusIcon from "@/components/ui/StatusIcon";
-import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
-import { mapToMarketDataStatus } from "@/utils/status-mapping";
-import { useTranslations, useLanguage } from "@/i18n";
+} from '@/data/clientData';
+import { ClientLogoIcon } from '@/components/icons/LogoIcon';
+import StatusIcon from '@/components/ui/StatusIcon';
+import LanguageSwitcher from '@/components/ui/LanguageSwitcher';
+import { mapToMarketDataStatus } from '@/utils/status-mapping';
+import { useTranslations, useLanguage } from '@/i18n';
 
-import styles from "@/styles/app/client/ClientPage.module.scss";
+import styles from '@/styles/app/client/ClientPage.module.scss';
 
 const ClientPage = () => {
   const { translation } = useTranslations();
@@ -30,7 +30,7 @@ const ClientPage = () => {
       <div className={styles.content}>
         <div className={styles.statusTable}>
           <div className={styles.tableHeader}>
-            <h2>{translation("client.dashboardStatus")}</h2>
+            <h2>{translation('client.dashboardStatus')}</h2>
             <LanguageSwitcher />
           </div>
 
@@ -41,7 +41,7 @@ const ClientPage = () => {
                   <StatusIcon status={mapToMarketDataStatus(titanService.status)} size="large" />
                 </div>
                 <div className={styles.serviceInfo}>
-                  <h3 className={styles.serviceName}>{translation("client.titan")}</h3>
+                  <h3 className={styles.serviceName}>{translation('client.titan')}</h3>
                 </div>
               </div>
 
@@ -58,7 +58,7 @@ const ClientPage = () => {
 
               <div className={styles.metricsColumn}>
                 <div className={styles.metric}>
-                  <span className={styles.metricLabel}>{translation("client.uptime")}</span>
+                  <span className={styles.metricLabel}>{translation('client.uptime')}</span>
                   <span
                     className={styles.metricValue}
                     style={{ color: getPercentageColor(titanService.uptime) }}
@@ -69,18 +69,18 @@ const ClientPage = () => {
               </div>
 
               <div className={styles.lastUpdateColumn}>
-                <span className={styles.lastUpdateLabel}>{translation("client.lastCheck")}</span>
+                <span className={styles.lastUpdateLabel}>{translation('client.lastCheck')}</span>
                 <span className={styles.lastUpdateValue}>
                   {titanService.lastCheck.toLocaleTimeString(
-                    locale === "fr"
-                      ? "fr-FR"
-                      : locale === "en"
-                        ? "en-US"
-                        : locale === "es"
-                          ? "es-ES"
-                          : locale === "pt"
-                            ? "pt-BR"
-                            : "it-IT",
+                    locale === 'fr'
+                      ? 'fr-FR'
+                      : locale === 'en'
+                        ? 'en-US'
+                        : locale === 'es'
+                          ? 'es-ES'
+                          : locale === 'pt'
+                            ? 'pt-BR'
+                            : 'it-IT',
                   )}
                 </span>
               </div>
@@ -95,7 +95,7 @@ const ClientPage = () => {
                   />
                 </div>
                 <div className={styles.serviceInfo}>
-                  <h3 className={styles.serviceName}>{translation("client.marketData")}</h3>
+                  <h3 className={styles.serviceName}>{translation('client.marketData')}</h3>
                 </div>
               </div>
 
@@ -112,7 +112,7 @@ const ClientPage = () => {
 
               <div className={styles.metricsColumn}>
                 <div className={styles.metric}>
-                  <span className={styles.metricLabel}>{translation("client.quality")}</span>
+                  <span className={styles.metricLabel}>{translation('client.quality')}</span>
                   <span
                     className={styles.metricValue}
                     style={{
@@ -125,18 +125,18 @@ const ClientPage = () => {
               </div>
 
               <div className={styles.lastUpdateColumn}>
-                <span className={styles.lastUpdateLabel}>{translation("client.lastUpdate")}</span>
+                <span className={styles.lastUpdateLabel}>{translation('client.lastUpdate')}</span>
                 <span className={styles.lastUpdateValue}>
                   {marketDataSource.lastUpdate.toLocaleTimeString(
-                    locale === "fr"
-                      ? "fr-FR"
-                      : locale === "en"
-                        ? "en-US"
-                        : locale === "es"
-                          ? "es-ES"
-                          : locale === "pt"
-                            ? "pt-BR"
-                            : "it-IT",
+                    locale === 'fr'
+                      ? 'fr-FR'
+                      : locale === 'en'
+                        ? 'en-US'
+                        : locale === 'es'
+                          ? 'es-ES'
+                          : locale === 'pt'
+                            ? 'pt-BR'
+                            : 'it-IT',
                   )}
                 </span>
               </div>

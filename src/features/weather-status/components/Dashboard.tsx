@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Layout from "@/components/layout/Layout";
-import StatusTable from "./StatusTable";
-import { useMarketData } from "../hooks/useMarketData";
-import { titanServices, getStatusIcon, getStatusColor, getStatusText } from "@/data/clientData";
+import { useState } from 'react';
+import Layout from '@/components/layout/Layout';
+import StatusTable from './StatusTable';
+import { useMarketData } from '../hooks/useMarketData';
+import { titanServices, getStatusIcon, getStatusColor, getStatusText } from '@/data/clientData';
 
-import styles from "@/styles/features/weather-status/components/Dashboard.module.scss";
+import styles from '@/styles/features/weather-status/components/Dashboard.module.scss';
 
 const Dashboard = () => {
   const { enterprises, isLoading, error } = useMarketData();
