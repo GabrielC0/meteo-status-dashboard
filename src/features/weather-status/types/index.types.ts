@@ -17,6 +17,6 @@ export interface MarketDataCompany {
 
 export type MarketDataStatus = "SUCCESS" | "WARNING" | "ERROR" | "UNKNOWN";
 
-export * from "./market-data.types";
+export * from "./MarketData.types";
 
 export type SortKey = "name" | "status" | "date";

@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { MarketDataStatus } from "@/features/weather-status/types/index.types";
 import { StatusIcons } from "@/components/icons";
 import { Tooltip } from "react-tooltip";
-import styles from "./StatusIcon.module.css";
+import styles from "@/styles/components/ui/StatusIcon.module.scss";
 
 export interface IconProps {
   width?: number;
@@ -16,17 +16,11 @@ interface StatusIconProps {
   showTooltip?: boolean;
 }
 
-const StatusIcon = ({
-  status,
-  size = "medium",
-  showTooltip = true,
-}: StatusIconProps) => {
+const StatusIcon = ({ status, size = "medium", showTooltip = true }: StatusIconProps) => {
   const [tooltipId, setTooltipId] = useState<string>("");
 
   useEffect(() => {
-    setTooltipId(
-      `status-tooltip-${status}-${Math.random().toString(36).slice(2, 11)}`
-    );
+    setTooltipId(`status-tooltip-${status}-${Math.random().toString(36).slice(2, 11)}`);
   }, [status]);
 
   const sizeConfig = {
@@ -89,4 +83,6 @@ const StatusIcon = ({
   );
 };
 
-export default StatusIcon;
+StatusIcon.displayName = "Ui.StatusIcon";
+
+export default memo(StatusIcon);

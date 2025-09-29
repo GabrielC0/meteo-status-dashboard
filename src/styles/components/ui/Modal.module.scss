@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 20000;
   overflow: hidden;
 }
 
@@ -23,6 +23,7 @@
   width: 1000px;
   display: flex;
   flex-direction: column;
+  z-index: 20001;
 }
 
 .header {

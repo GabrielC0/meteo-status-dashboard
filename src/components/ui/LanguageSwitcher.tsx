@@ -84,16 +84,14 @@ const LanguageSwitcher: React.FC = () => {
                 onMouseLeave={() => setHoveredLanguage(null)}
                 style={{
                   width: "100%",
-                  padding:
-                    hoveredLanguage === language.code ? "8px 8px" : "12px",
+                  padding: hoveredLanguage === language.code ? "8px 8px" : "12px",
                   border: "none",
                   background: "transparent",
                   cursor: "pointer",
                   transition: "all 0.5s ease",
                   display: "flex",
                   alignItems: "center",
-                  justifyContent:
-                    hoveredLanguage === language.code ? "flex-start" : "center",
+                  justifyContent: hoveredLanguage === language.code ? "flex-start" : "center",
                   fontSize: "16px",
                   gap: hoveredLanguage === language.code ? "4px" : "0",
                   height: "auto",

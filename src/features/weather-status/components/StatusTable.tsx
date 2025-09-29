@@ -3,16 +3,16 @@
 import StatusIcon from "@/components/ui/StatusIcon";
 import NoContractIcon from "@/components/icons/NoContractIcon";
 import Modal from "@/components/ui/Modal";
-import { MarketDataCompany } from "../types/index.types";
+import { MarketDataCompany } from "../types/Index.types";
 import { useMemo, useState } from "react";
 import MultiSelect from "@/components/ui/MultiSelect";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
-import { isValidTableSortKey } from "@/types/table-sort.types";
+import { isValidTableSortKey } from "@/types/TableSort.types";
 import { mapToMarketDataStatus } from "@/utils/status-mapping";
 import { useTranslations, useLanguage } from "@/i18n";
 
-import styles from "./StatusTable.module.css";
-import { SortKey } from "../types/index.types";
+import styles from "@/styles/features/weather-status/components/StatusTable.module.scss";
+import { SortKey } from "../types/Index.types";
 
 // Converts Excel serial date number to milliseconds
 const excelDaysToMilliseconds = (excelDaysString: string): number => {
@@ -22,9 +22,7 @@ const excelDaysToMilliseconds = (excelDaysString: string): number => {
     return 0;
   }
 
-  return (
-    Date.UTC(1899, 11, 30) + (excelDaysCount + 29221) * 24 * 60 * 60 * 1000
-  );
+  return Date.UTC(1899, 11, 30) + (excelDaysCount + 29221) * 24 * 60 * 60 * 1000;
 };
 
 interface StatusTableProps {
@@ -38,6 +36,7 @@ interface StatusTableProps {
   getStatusIcon?: (status: string) => string;
   getStatusColor?: (status: string) => string;
   getStatusText?: (status: string) => string;
+  isLoading?: boolean;
 }
 
 const StatusTable = ({
@@ -46,6 +45,7 @@ const StatusTable = ({
   showTooltip,
   setShowTooltip,
   getStatusColor,
+  isLoading,
 }: StatusTableProps) => {
   const { translation } = useTranslations();
   const { locale } = useLanguage();
@@ -54,8 +54,7 @@ const StatusTable = ({
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [showHorsContrat, setShowHorsContrat] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [selectedEnterprise, setSelectedEnterprise] =
-    useState<MarketDataCompany | null>(null);
+  const [selectedEnterprise, setSelectedEnterprise] = useState<MarketDataCompany | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const pageSize = 8;
 
@@ -74,29 +73,29 @@ const StatusTable = ({
         locale === "fr"
           ? "fr-FR"
           : locale === "es"
-          ? "es-ES"
-          : locale === "pt"
-          ? "pt-BR"
-          : locale === "it"
-          ? "it-IT"
-          : "en-US",
+            ? "es-ES"
+            : locale === "pt"
+              ? "pt-BR"
+              : locale === "it"
+                ? "it-IT"
+                : "en-US",
         {
           year: "numeric",
           month: "2-digit",
           day: "2-digit",
-        }
+        },
       ) +
       " à " +
       formattedDate.toLocaleTimeString(
         locale === "fr"
           ? "fr-FR"
           : locale === "es"
-          ? "es-ES"
-          : locale === "pt"
-          ? "pt-BR"
-          : locale === "it"
-          ? "it-IT"
-          : "en-US"
+            ? "es-ES"
+            : locale === "pt"
+              ? "pt-BR"
+              : locale === "it"
+                ? "it-IT"
+                : "en-US",
       )
     );
   };
@@ -114,12 +113,12 @@ const StatusTable = ({
       "seb",
       "vinciconstruction",
     ],
-    []
+    [],
   );
 
   const companyNames = useMemo(() => {
-    const names = Array.from(new Set(enterprises.map((e) => e.name))).sort(
-      (a, b) => a.localeCompare(b)
+    const names = Array.from(new Set(enterprises.map((e) => e.name))).sort((a, b) =>
+      a.localeCompare(b),
     );
     return names;
   }, [enterprises]);
@@ -127,19 +126,14 @@ const StatusTable = ({
   const rows = useMemo(() => {
     const filteredByContract = showHorsContrat
       ? enterprises
-      : enterprises.filter(
-          (e) => !horsContractList.includes(e.name.toLowerCase())
-        );
+      : enterprises.filter((e) => !horsContractList.includes(e.name.toLowerCase()));
 
     const filteredByCompany =
       selectedCompanies.length > 0
         ? filteredByContract.filter((e) => selectedCompanies.includes(e.name))
         : filteredByContract;
 
-    const comparatorBy: Record<
-      SortKey,
-      (a: MarketDataCompany, b: MarketDataCompany) => number
-    > = {
+    const comparatorBy: Record<SortKey, (a: MarketDataCompany, b: MarketDataCompany) => number> = {
       name: (a, b) => a.name.localeCompare(b.name),
       status: (a, b) => a.marketDataStatus.localeCompare(b.marketDataStatus),
       date: (a, b) => {
@@ -155,14 +149,7 @@ const StatusTable = ({
     });
 
     return sorted;
-  }, [
-    enterprises,
-    selectedCompanies,
-    sortKey,
-    sortDir,
-    showHorsContrat,
-    horsContractList,
-  ]);
+  }, [enterprises, selectedCompanies, sortKey, sortDir, showHorsContrat, horsContractList]);
 
   const totalPages = useMemo(() => {
     return Math.max(1, Math.ceil(rows.length / pageSize));
@@ -209,9 +196,7 @@ const StatusTable = ({
           </div>
 
           <div className={styles.titleSection}>
-            <h1 className={styles.glassTitle}>
-              {translation("dashboard.title")}
-            </h1>
+            <h1 className={styles.glassTitle}>{translation("dashboard.title")}</h1>
           </div>
 
           <div className={styles.dateSection}>
@@ -220,24 +205,24 @@ const StatusTable = ({
                 locale === "fr"
                   ? "fr-FR"
                   : locale === "es"
-                  ? "es-ES"
-                  : locale === "pt"
-                  ? "pt-BR"
-                  : locale === "it"
-                  ? "it-IT"
-                  : "en-US"
+                    ? "es-ES"
+                    : locale === "pt"
+                      ? "pt-BR"
+                      : locale === "it"
+                        ? "it-IT"
+                        : "en-US",
               )}{" "}
               à{" "}
               {titanService.lastCheck.toLocaleTimeString(
                 locale === "fr"
                   ? "fr-FR"
                   : locale === "es"
-                  ? "es-ES"
-                  : locale === "pt"
-                  ? "pt-BR"
-                  : locale === "it"
-                  ? "it-IT"
-                  : "en-US"
+                    ? "es-ES"
+                    : locale === "pt"
+                      ? "pt-BR"
+                      : locale === "it"
+                        ? "it-IT"
+                        : "en-US",
               )}
             </span>
           </div>
@@ -320,7 +305,13 @@ const StatusTable = ({
           </tr>
         </thead>
         <tbody>
-          {rows.length === 0 ? (
+          {isLoading ? (
+            <tr className={styles.emptyRow}>
+              <td colSpan={3} className={styles.emptyMessage}>
+                Rechargement des données...
+              </td>
+            </tr>
+          ) : rows.length === 0 ? (
             <tr className={styles.emptyRow}>
               <td colSpan={3} className={styles.emptyMessage}>
                 {translation("table.noCompanies")}
@@ -328,17 +319,12 @@ const StatusTable = ({
             </tr>
           ) : (
             paginatedRows.map((enterprise) => {
-              const isHorsContrat = horsContractList.includes(
-                enterprise.name.toLowerCase()
-              );
+              const isHorsContrat = horsContractList.includes(enterprise.name.toLowerCase());
 
               return (
                 <tr key={enterprise.id}>
                   <td className={styles.statusCell}>
-                    <StatusIcon
-                      status={enterprise.marketDataStatus}
-                      size="large"
-                    />
+                    <StatusIcon status={enterprise.marketDataStatus} size="large" />
                   </td>
                   <td className={styles.serviceName}>
                     <div
@@ -384,8 +370,7 @@ const StatusTable = ({
                         )}
                       </div>
                       <span className={styles.operationsCount}>
-                        ({enterprise.totalOperations}{" "}
-                        {translation("table.operationsCount")})
+                        ({enterprise.totalOperations} {translation("table.operationsCount")})
                       </span>
                     </div>
                   </td>
@@ -435,9 +420,7 @@ const StatusTable = ({
           setIsModalOpen(false);
           setSelectedEnterprise(null);
         }}
-        title={`${translation("modal.operationDetails")} - ${
-          selectedEnterprise?.name || ""
-        }`}
+        title={`${translation("modal.operationDetails")} - ${selectedEnterprise?.name || ""}`}
       >
         {selectedEnterprise && (
           <div>
@@ -536,9 +519,7 @@ const StatusTable = ({
                       backgroundColor: index % 2 === 0 ? "#ffffff" : "#f9f9f9",
                     }}
                   >
-                    <td style={{ padding: "10px", border: "1px solid #ddd" }}>
-                      {index + 1}
-                    </td>
+                    <td style={{ padding: "10px", border: "1px solid #ddd" }}>{index + 1}</td>
                     <td
                       style={{
                         padding: "10px",

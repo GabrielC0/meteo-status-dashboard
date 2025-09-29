@@ -1,5 +1,5 @@
 export const mapToMarketDataStatus = (
-  status: string
+  status: string,
 ): "SUCCESS" | "WARNING" | "ERROR" | "UNKNOWN" => {
   switch (status) {
     case "operational":

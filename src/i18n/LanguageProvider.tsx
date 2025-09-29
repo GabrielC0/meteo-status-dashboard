@@ -9,9 +9,7 @@ interface LanguageContextType {
   setLocale: (locale: Locale) => void;
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(
-  undefined
-);
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
@@ -25,9 +23,7 @@ interface LanguageProviderProps {
   children: React.ReactNode;
 }
 
-export const LanguageProvider: React.FC<LanguageProviderProps> = ({
-  children,
-}) => {
+export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
   const [locale, setLocale] = useState<Locale>("fr");
 
   useEffect(() => {
@@ -48,11 +44,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
 
   return (
     <LanguageContext.Provider value={contextValue}>
-      <IntlProvider
-        locale={locale}
-        messages={messages[locale]}
-        defaultLocale="fr"
-      >
+      <IntlProvider locale={locale} messages={messages[locale]} defaultLocale="fr">
         {children}
       </IntlProvider>
     </LanguageContext.Provider>

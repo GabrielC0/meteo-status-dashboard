@@ -27,8 +27,7 @@ export const titanServices: TitanService[] = [
     status: "operational",
     uptime: 99.97,
     lastCheck: new Date("2025-09-16T10:30:00Z"),
-    description:
-      "Service TITAN - Plateforme de trading et de gestion des risques",
+    description: "Service TITAN - Plateforme de trading et de gestion des risques",
     dependencies: ["database", "cache-redis", "message-queue"],
   },
 ];
@@ -122,12 +121,10 @@ export const getOverallSystemStatus = (): {
   titan: { status: string; issues: number; total: number };
   marketData: { status: string; issues: number; total: number };
 } => {
-  const titanIssues = titanServices.filter(
-    (service) => service.status !== "operational"
-  ).length;
+  const titanIssues = titanServices.filter((service) => service.status !== "operational").length;
 
   const marketDataIssues = marketDataSources.filter(
-    (source) => source.status !== "operational"
+    (source) => source.status !== "operational",
   ).length;
 
   const getTitanStatus = () => {

@@ -1,15 +1,13 @@
 "use client";
 
 import Papa from "papaparse";
-import { MarketDataCompany, MarketDataStatus, MarketDataOperation } from "../types/index.types";
+import { MarketDataCompany, MarketDataStatus, MarketDataOperation } from "../types/Index.types";
 
 const CSV_FILE = "/csv/checkDataMarket_db001_20250911_1012.csv";
 
-// Random Status
 const getRandomStatus = (): MarketDataStatus =>
   Math.random() > 0.8 ? "ERROR" : Math.random() > 0.6 ? "WARNING" : "SUCCESS";
 
-// Parse CSV content and extract market data companies
 const parseCSVData = (csvContent: string): MarketDataCompany[] => {
   const { data } = Papa.parse<string[]>(csvContent, {
     delimiter: ";",
@@ -18,11 +16,17 @@ const parseCSVData = (csvContent: string): MarketDataCompany[] => {
     transform: (value: string) => value?.trim(),
   });
 
-  // const companies = [];
   const companyMap = new Map<string, MarketDataCompany>();
 
   data.forEach((row) => {
-    const [marketDataCompany, operationType, lastMarketDataUpdate, devise1, devise2OrTypeRecup, typeRecuperation] = row;
+    const [
+      marketDataCompany,
+      operationType,
+      lastMarketDataUpdate,
+      devise1,
+      devise2OrTypeRecup,
+      typeRecuperation,
+    ] = row;
 
     if (
       !marketDataCompany ||
@@ -35,13 +39,13 @@ const parseCSVData = (csvContent: string): MarketDataCompany[] => {
       return;
     }
 
-    const devise2: string | undefined = (operationType === "FXCROSS" || operationType === "PTSWAP")
-      ? devise2OrTypeRecup
-      : undefined;
+    const devise2: string | undefined =
+      operationType === "FXCROSS" || operationType === "PTSWAP" ? devise2OrTypeRecup : undefined;
 
-    const finalTypeRecuperation: string = (operationType === "FXCROSS" || operationType === "PTSWAP")
-      ? typeRecuperation || ""
-      : devise2OrTypeRecup || "";
+    const finalTypeRecuperation: string =
+      operationType === "FXCROSS" || operationType === "PTSWAP"
+        ? typeRecuperation || ""
+        : devise2OrTypeRecup || "";
 
     const currentOperation: MarketDataOperation = {
       operationType: operationType || "",
@@ -52,13 +56,11 @@ const parseCSVData = (csvContent: string): MarketDataCompany[] => {
     };
 
     const existing = companyMap.get(marketDataCompany);
-
-    // Group data by company
     if (existing) {
       existing.totalOperations++;
       existing.operations.push(currentOperation);
     } else {
-      const newCompany = {
+      const newCompany: MarketDataCompany = {
         id: marketDataCompany,
         name: marketDataCompany,
         totalOperations: 1,
@@ -73,23 +75,16 @@ const parseCSVData = (csvContent: string): MarketDataCompany[] => {
   return [...companyMap.values()].sort((a, b) => a.name.localeCompare(b.name));
 };
 
-// Get market data companies from CSV
-export const getMarketDataCompanies = async (): Promise<
-  MarketDataCompany[]
-> => {
+export const getMarketDataCompanies = async (): Promise<MarketDataCompany[]> => {
   try {
-    // Check if the file exists
     const response = await fetch(CSV_FILE, { method: "HEAD" });
     if (!response.ok) {
       return [];
     }
 
-    // Read the file content
     const contentResponse = await fetch(CSV_FILE);
     if (!contentResponse.ok) {
-      throw new Error(
-        `Erreur ${contentResponse.status}: ${contentResponse.statusText}`
-      );
+      throw new Error(`Erreur ${contentResponse.status}: ${contentResponse.statusText}`);
     }
 
     const csvContent = await contentResponse.text();
@@ -97,10 +92,15 @@ export const getMarketDataCompanies = async (): Promise<
       throw new Error("Le fichier CSV est vide");
     }
 
-    // Parse and return the data
     return parseCSVData(csvContent);
   } catch (error) {
     console.error("Erreur lors du chargement des données CSV:", error);
     return [];
   }
 };
+
+const marketDataService = {
+  getMarketDataCompanies,
+};
+
+export default marketDataService;

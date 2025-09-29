@@ -1,5 +1,6 @@
 import "./globals.css";
 import { LanguageProvider } from "@/i18n";
+import ErrorBoundary from "@/components/ui/ErrorBoundary";
 
 const RootLayout = ({
   children,
@@ -9,7 +10,9 @@ const RootLayout = ({
   return (
     <html lang="fr">
       <body>
-        <LanguageProvider>{children}</LanguageProvider>
+        <LanguageProvider>
+          <ErrorBoundary>{children}</ErrorBoundary>
+        </LanguageProvider>
       </body>
     </html>
   );

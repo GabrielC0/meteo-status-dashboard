@@ -13,7 +13,7 @@ import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 import { mapToMarketDataStatus } from "@/utils/status-mapping";
 import { useTranslations, useLanguage } from "@/i18n";
 
-import styles from "./ClientPage.module.css";
+import styles from "@/styles/app/client/ClientPage.module.scss";
 
 const ClientPage = () => {
   const { translation } = useTranslations();
@@ -38,15 +38,10 @@ const ClientPage = () => {
             <div className={styles.statusRow}>
               <div className={styles.serviceColumn}>
                 <div className={styles.serviceIcon}>
-                  <StatusIcon
-                    status={mapToMarketDataStatus(titanService.status)}
-                    size="large"
-                  />
+                  <StatusIcon status={mapToMarketDataStatus(titanService.status)} size="large" />
                 </div>
                 <div className={styles.serviceInfo}>
-                  <h3 className={styles.serviceName}>
-                    {translation("client.titan")}
-                  </h3>
+                  <h3 className={styles.serviceName}>{translation("client.titan")}</h3>
                 </div>
               </div>
 
@@ -74,11 +69,19 @@ const ClientPage = () => {
               </div>
 
               <div className={styles.lastUpdateColumn}>
-                <span className={styles.lastUpdateLabel}>
-                  {translation("client.lastCheck")}
-                </span>
+                <span className={styles.lastUpdateLabel}>{translation("client.lastCheck")}</span>
                 <span className={styles.lastUpdateValue}>
-                  {titanService.lastCheck.toLocaleTimeString(locale === "fr" ? "fr-FR" : locale === "en" ? "en-US" : locale === "es" ? "es-ES" : locale === "pt" ? "pt-BR" : "it-IT")}
+                  {titanService.lastCheck.toLocaleTimeString(
+                    locale === "fr"
+                      ? "fr-FR"
+                      : locale === "en"
+                        ? "en-US"
+                        : locale === "es"
+                          ? "es-ES"
+                          : locale === "pt"
+                            ? "pt-BR"
+                            : "it-IT",
+                  )}
                 </span>
               </div>
             </div>
@@ -92,9 +95,7 @@ const ClientPage = () => {
                   />
                 </div>
                 <div className={styles.serviceInfo}>
-                  <h3 className={styles.serviceName}>
-                    {translation("client.marketData")}
-                  </h3>
+                  <h3 className={styles.serviceName}>{translation("client.marketData")}</h3>
                 </div>
               </div>
 
@@ -124,11 +125,19 @@ const ClientPage = () => {
               </div>
 
               <div className={styles.lastUpdateColumn}>
-                <span className={styles.lastUpdateLabel}>
-                  {translation("client.lastUpdate")}
-                </span>
+                <span className={styles.lastUpdateLabel}>{translation("client.lastUpdate")}</span>
                 <span className={styles.lastUpdateValue}>
-                  {marketDataSource.lastUpdate.toLocaleTimeString(locale === "fr" ? "fr-FR" : locale === "en" ? "en-US" : locale === "es" ? "es-ES" : locale === "pt" ? "pt-BR" : "it-IT")}
+                  {marketDataSource.lastUpdate.toLocaleTimeString(
+                    locale === "fr"
+                      ? "fr-FR"
+                      : locale === "en"
+                        ? "en-US"
+                        : locale === "es"
+                          ? "es-ES"
+                          : locale === "pt"
+                            ? "pt-BR"
+                            : "it-IT",
+                  )}
                 </span>
               </div>
             </div>

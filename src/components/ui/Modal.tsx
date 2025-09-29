@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useEffect } from "react";
-import styles from "./Modal.module.css";
+import styles from "@/styles/components/ui/Modal.module.scss";
 
 interface ModalProps {
   isOpen: boolean;
@@ -45,11 +45,7 @@ const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
 
   return (
     <div className={styles.overlay} onClick={onClose}>
-      <div
-        className={styles.modal}
-        onClick={(e) => e.stopPropagation()}
-        data-modal-content
-      >
+      <div className={styles.modal} onClick={(e) => e.stopPropagation()} data-modal-content>
         <div className={styles.header}>
           <h2 className={styles.title}>{title}</h2>
           <button className={styles.closeButton} onClick={onClose}>

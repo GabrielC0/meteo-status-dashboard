@@ -52,52 +52,22 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.tooltip {
-  position: absolute;
-  top: 50%;
-  left: 100%;
-  transform: translateY(-50%);
-  margin-left: 8px;
-  color: white;
-  padding: 0.5rem 0.75rem;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  white-space: nowrap;
-  z-index: 1000;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.tooltipArrow {
-  position: absolute;
-  top: 50%;
-  left: -4px;
-  transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  border-top: 4px solid transparent;
-  border-bottom: 4px solid transparent;
-  border-right: 4px solid;
-}
-
 .loading {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 4rem 2rem;
-  background: white;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
+  margin: 2rem auto;
+  color: #0f172a;
+  font-weight: 600;
 }
 
 .loading p {
-  font-size: 1.1rem;
-  color: #6c757d;
-  font-style: italic;
+  font-size: 1.05rem;
+  margin: 0;
 }
 
 .error {
@@ -105,37 +75,23 @@
   border: 1px solid #f5c6cb;
   border-radius: 8px;
   padding: 2rem;
-  margin-bottom: 2rem;
+  margin: 2rem auto;
+  color: #721c24;
 }
 
 .error h2 {
-  color: #721c24;
   margin-bottom: 1rem;
   font-size: 1.3rem;
 }
 
 .error p {
-  color: #721c24;
   margin: 0;
 }
 
 @media (max-width: 768px) {
-  .titanStatusBubble {
-    position: static;
-    margin-top: 1rem;
-    align-self: flex-end;
-  }
-
-  .dashboardContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-  }
-
   .loading {
-    padding: 2rem 1rem;
+    padding: 1.5rem;
   }
-
   .error {
     padding: 1.5rem;
   }

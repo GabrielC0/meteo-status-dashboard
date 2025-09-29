@@ -1,2 +1,2 @@
-export { default as StatusIcon } from './StatusIcon';
-export { default as StatusBadge } from './StatusBadge';
+export { default as StatusIcon } from "./StatusIcon";
+export { default as StatusBadge } from "./StatusBadge";

@@ -1,6 +1,6 @@
 import { Dashboard } from "@/features/weather-status/components";
 import { ClientLogoIcon } from "@/components/icons/LogoIcon";
-import styles from "./page.module.css";
+import styles from "@/styles/app/page.module.scss";
 
 const HomePage = () => {
   return (

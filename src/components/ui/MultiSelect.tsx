@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 
-import { MultiSelectProps } from "@/types/multi-select.types";
+import { MultiSelectProps } from "@/types/MultiSelect.types";
 import { useTranslations } from "@/i18n";
-import styles from "./MultiSelect.module.css";
+import styles from "@/styles/components/ui/MultiSelect.module.scss";
 
 const MultiSelect = ({
   options,
@@ -31,8 +31,7 @@ const MultiSelect = ({
     const onDocClick = (e: MouseEvent) => {
       if (!rootRef.current) return;
       const target = e.target;
-      if (target instanceof Node && !rootRef.current.contains(target))
-        setOpen(false);
+      if (target instanceof Node && !rootRef.current.contains(target)) setOpen(false);
     };
 
     document.addEventListener("mousedown", onDocClick);
@@ -71,21 +70,17 @@ const MultiSelect = ({
 
   const selectedOptions = useMemo(
     () => options.filter((o) => value.includes(o.value)),
-    [options, value]
+    [options, value],
   );
 
   const filteredOptions = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
-    const horsSet = new Set(
-      (horsContractList ?? []).map((s) => s.toLowerCase())
-    );
+    const horsSet = new Set((horsContractList ?? []).map((s) => s.toLowerCase()));
     const visible = options.filter((o) =>
-      showHorsContract ? true : !horsSet.has(o.value.toLowerCase())
+      showHorsContract ? true : !horsSet.has(o.value.toLowerCase()),
     );
 
-    return term
-      ? visible.filter((o) => o.label.toLowerCase().includes(term))
-      : visible;
+    return term ? visible.filter((o) => o.label.toLowerCase().includes(term)) : visible;
   }, [options, searchTerm, showHorsContract, horsContractList]);
 
   return (
@@ -164,12 +159,8 @@ const MultiSelect = ({
                     onHorsContratChange?.(isChecked);
 
                     if (!isChecked) {
-                      const horsSet = new Set(
-                        horsContractList.map((s) => s.toLowerCase())
-                      );
-                      const filteredValue = value.filter(
-                        (v) => !horsSet.has(v.toLowerCase())
-                      );
+                      const horsSet = new Set(horsContractList.map((s) => s.toLowerCase()));
+                      const filteredValue = value.filter((v) => !horsSet.has(v.toLowerCase()));
                       onChange(filteredValue);
                     }
                   }}
@@ -181,8 +172,7 @@ const MultiSelect = ({
           <div
             className={styles.list}
             style={{
-              maxHeight:
-                40 * Math.max(2, Math.min(maxVisible, filteredOptions.length)),
+              maxHeight: 40 * Math.max(2, Math.min(maxVisible, filteredOptions.length)),
             }}
           >
             {filteredOptions.map((o) => {
@@ -196,11 +186,7 @@ const MultiSelect = ({
                   className={styles.option}
                   onMouseDown={(e) => {
                     e.preventDefault();
-                    onChange(
-                      checked
-                        ? value.filter((v) => v !== o.value)
-                        : [...value, o.value]
-                    );
+                    onChange(checked ? value.filter((v) => v !== o.value) : [...value, o.value]);
                   }}
                   aria-selected={checked}
                 >
@@ -221,4 +207,6 @@ const MultiSelect = ({
   );
 };
 
-export default MultiSelect;
+MultiSelect.displayName = "Ui.MultiSelect";
+
+export default memo(MultiSelect);

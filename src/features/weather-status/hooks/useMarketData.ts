@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { getMarketDataCompanies } from "../services/dataService";
+import $marketData from "../services/$marketData";
 
-import { MarketDataCompany } from "../types/index.types";
+import { MarketDataCompany } from "../types/Index.types";
 
 const CSV_FILE = "/csv/checkDataMarket_db001_20250911_1012.csv";
 
@@ -19,7 +19,7 @@ export const useMarketData = () => {
       setIsLoading(true);
       setError(null);
 
-      const marketDataCompanies = await getMarketDataCompanies();
+      const marketDataCompanies = await $marketData.getMarketDataCompanies();
 
       if (marketDataCompanies.length === 0) {
         setError("No data found in the CSV file.");
@@ -46,14 +46,12 @@ export const useMarketData = () => {
         console.error("Error updating data:", err);
         setEnterprises((prev) =>
           prev.map((enterprise) =>
-            enterprise.id === enterpriseId
-              ? { ...enterprise, lastUpdate: new Date() }
-              : enterprise
-          )
+            enterprise.id === enterpriseId ? { ...enterprise, lastUpdate: new Date() } : enterprise,
+          ),
         );
       }
     },
-    [loadMarketData]
+    [loadMarketData],
   );
 
   useEffect(() => {
