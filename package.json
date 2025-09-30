@@ -23,7 +23,8 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-intl": "^7.1.11",
-    "react-tooltip": "^5.29.1"
+    "react-tooltip": "^5.29.1",
+    "highcharts": "^11.4.8"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
