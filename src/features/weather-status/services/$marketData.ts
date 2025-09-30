@@ -1,7 +1,7 @@
 'use client';
 
 import Papa from 'papaparse';
-import { MarketDataCompany, MarketDataStatus, MarketDataOperation } from '../types/Index.types';
+import { MarketDataCompany, MarketDataStatus, MarketDataOperation } from '../types/index.types';
 
 const CSV_FILE = '/csv/checkDataMarket_db001_20250911_1012.csv';
 

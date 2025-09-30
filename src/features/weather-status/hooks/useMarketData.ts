@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import $marketData from '../services/$marketData';
 
-import { MarketDataCompany } from '../types/Index.types';
+import { MarketDataCompany } from '../types/index.types';
 
 const CSV_FILE = '/csv/checkDataMarket_db001_20250911_1012.csv';
 

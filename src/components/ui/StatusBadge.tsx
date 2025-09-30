@@ -1,4 +1,4 @@
-import { MarketDataStatus } from '../../features/weather-status/types/Index.types';
+import { MarketDataStatus } from '@/features/weather-status/types/index.types';
 
 import StatusIcon from './StatusIcon';
 import { memo } from 'react';

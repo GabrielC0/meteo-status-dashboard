@@ -1,5 +1,5 @@
 import { memo, useEffect, useMemo, useState } from 'react';
-import { MarketDataStatus } from '@/features/weather-status/types/Index.types';
+import { MarketDataStatus } from '@/features/weather-status/types/index.types';
 import { StatusIcons } from '@/components/icons';
 import dynamic from 'next/dynamic';
 import styles from '@/styles/components/ui/StatusIcon.module.scss';

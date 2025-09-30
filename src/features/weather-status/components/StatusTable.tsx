@@ -3,7 +3,7 @@
 import StatusIcon from '@/components/ui/StatusIcon';
 import NoContractIcon from '@/components/icons/NoContractIcon';
 import Modal from '@/components/ui/Modal';
-import { MarketDataCompany } from '../types/Index.types';
+import { MarketDataCompany } from '../types/index.types';
 import { useMemo, useState } from 'react';
 import MultiSelect from '@/components/ui/MultiSelect';
 import LanguageSwitcher from '@/components/ui/LanguageSwitcher';
@@ -12,7 +12,7 @@ import { mapToMarketDataStatus } from '@/utils/status-mapping';
 import { useTranslations, useLanguage } from '@/i18n';
 
 import styles from '@/styles/features/weather-status/components/StatusTable.module.scss';
-import { SortKey } from '../types/Index.types';
+import { SortKey } from '../types/index.types';
 
 // Converts Excel serial date number to milliseconds
 const excelDaysToMilliseconds = (excelDaysString: string): number => {
