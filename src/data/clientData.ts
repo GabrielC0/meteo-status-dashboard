@@ -1,4 +1,4 @@
-export interface TitanService {
+export type TitanService = {
   id: string;
   name: string;
   status: 'operational' | 'degraded' | 'outage' | 'maintenance';
@@ -6,9 +6,9 @@ export interface TitanService {
   lastCheck: Date;
   description: string;
   dependencies: string[];
-}
+};
 
-export interface MarketDataSource {
+export type MarketDataSource = {
   id: string;
   name: string;
   status: 'operational' | 'warning' | 'error' | 'maintenance';
@@ -18,7 +18,7 @@ export interface MarketDataSource {
   errorRate: number;
   recordsProcessed: number;
   provider: string;
-}
+};
 
 export const titanServices: TitanService[] = [
   {

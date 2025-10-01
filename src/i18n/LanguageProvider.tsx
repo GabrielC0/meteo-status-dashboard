@@ -1,13 +1,15 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { IntlProvider } from 'react-intl';
-import { messages, Locale } from './messages';
 
-interface LanguageContextType {
+import { toLocale } from './localeUtils';
+import { Locale, messages } from './messages';
+
+type LanguageContextType = {
   locale: Locale;
   setLocale: (locale: Locale) => void;
-}
+};
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
@@ -19,18 +21,18 @@ export const useLanguage = () => {
   return context;
 };
 
-interface LanguageProviderProps {
+type LanguageProviderProps = {
   children: React.ReactNode;
-}
+};
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
   const [locale, setLocale] = useState<Locale>('fr');
 
   useEffect(() => {
-    const savedLocale = localStorage.getItem('locale') as Locale;
-    if (savedLocale && ['en', 'fr', 'es', 'pt', 'it'].includes(savedLocale)) {
-      setLocale(savedLocale);
-    }
+    const savedLocale = localStorage.getItem('locale');
+    const validatedLocale = toLocale(savedLocale, 'fr');
+
+    setLocale(validatedLocale);
   }, []);
 
   useEffect(() => {

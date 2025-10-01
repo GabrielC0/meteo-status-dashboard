@@ -139,6 +139,14 @@
     &--info {
       color: #60a5fa;
     }
+
+    &--primary {
+      color: #8b5cf6;
+    }
+
+    &--cyan {
+      color: #06b6d4;
+    }
   }
 
   &__statLabel {
@@ -316,6 +324,14 @@
 
 .variantInfo {
   @extend .dashboard__statCard--info;
+}
+
+.variantPrimary {
+  @extend .dashboard__statCard--primary;
+}
+
+.variantCyan {
+  @extend .dashboard__statCard--cyan;
 }
 
 .loading {

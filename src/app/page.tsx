@@ -1,5 +1,7 @@
 import dynamic from 'next/dynamic';
+
 import { ClientLogoIcon } from '@/components/icons/LogoIcon';
+
 import styles from '@/styles/app/page.module.scss';
 export const metadata = {
   title: 'Accueil | Météo Statuts',

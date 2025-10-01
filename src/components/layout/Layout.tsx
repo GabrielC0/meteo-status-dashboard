@@ -1,13 +1,14 @@
 import { ReactNode } from 'react';
+
 import Header from './Header';
 
 import styles from './Layout.module.scss';
 
-interface LayoutProps {
+type LayoutProps = {
   children: ReactNode;
   title?: string;
   hideHeader?: boolean;
-}
+};
 
 const Layout = ({
   children,

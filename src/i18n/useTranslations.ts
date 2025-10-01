@@ -1,6 +1,7 @@
 'use client';
 
 import { useIntl } from 'react-intl';
+
 import { MessageKey } from './messages';
 
 export const useTranslations = () => {

@@ -17,14 +17,16 @@
     "stylelint:fix": "stylelint \"src/**/*.{css,scss}\" --fix"
   },
   "dependencies": {
-    "@types/papaparse": "^5.3.16",
+    "@reduxjs/toolkit": "^2.9.0",
+    "dotenv": "^17.2.3",
+    "highcharts": "^11.4.8",
+    "mysql2": "^3.11.5",
     "next": "15.5.3",
-    "papaparse": "^5.5.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-intl": "^7.1.11",
-    "react-tooltip": "^5.29.1",
-    "highcharts": "^11.4.8"
+    "react-redux": "^9.2.0",
+    "react-tooltip": "^5.29.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

@@ -1,9 +1,11 @@
 'use client';
 
-import { useEffect, useRef, memo } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import Highcharts from 'highcharts';
-import ErrorBoundary from './ErrorBoundary';
+
 import type { ChartWrapperProps } from '@/types/ChartWrapper.types';
+
+import ErrorBoundary from './ErrorBoundary';
 
 const ChartWrapper = ({
   type,

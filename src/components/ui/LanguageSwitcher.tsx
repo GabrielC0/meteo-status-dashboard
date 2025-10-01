@@ -1,21 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useLanguage } from '@/i18n';
+import { useState } from 'react';
+
+import { LANGUAGES } from '@/i18n/localeUtils';
 import { Locale } from '@/i18n/messages';
+import { useLanguage } from '@/i18n';
 
 const LanguageSwitcher: React.FC = () => {
   const { locale, setLocale } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredLanguage, setHoveredLanguage] = useState<Locale | null>(null);
 
-  const languages = [
-    { code: 'fr' as Locale, flag: '🇫🇷', name: 'Français' },
-    { code: 'en' as Locale, flag: '🇬🇧', name: 'English' },
-    { code: 'es' as Locale, flag: '🇪🇸', name: 'Español' },
-    { code: 'pt' as Locale, flag: '🇧🇷', name: 'Português' },
-    { code: 'it' as Locale, flag: '🇮🇹', name: 'Italiano' },
-  ];
+  const languages = LANGUAGES;
 
   const currentLanguage = languages.find((lang) => lang.code === locale);
   const availableLanguages = languages.filter((lang) => lang.code !== locale);

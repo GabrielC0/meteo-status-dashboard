@@ -1,8 +1,8 @@
 import styles from './Header.module.css';
 
-interface HeaderProps {
+type HeaderProps = {
   title: string;
-}
+};
 
 const Header = ({ title }: HeaderProps) => {
   return (

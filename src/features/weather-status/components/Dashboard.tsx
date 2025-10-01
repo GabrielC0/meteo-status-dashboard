@@ -1,35 +1,33 @@
 'use client';
 
-import { useEffect, useMemo, useRef, memo, useState } from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
 import Highcharts from 'highcharts';
-import Layout from '@/components/layout/Layout';
+
+import {
+  getTitanCompanies,
+  getTitanError,
+  getTitanSessions,
+  getTitanTicketsStats,
+  useAppSelector,
+} from '@/stores';
+import type { TitanStatsProps } from '../types/Dashboard.types';
+
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
-import { useMarketData } from '../hooks/useMarketData';
+import Layout from '@/components/layout/Layout';
+
 import styles from '@/styles/features/weather-status/components/Dashboard.module.scss';
-
-type TitanStatsData = {
-  uniqueConnections: number;
-  totalConnections: number;
-  ticketsNouveau: number;
-  ticketsOuvert: number;
-  ticketsEnAttente: number;
-};
-
-type TitanStatsProps = {
-  stats: TitanStatsData;
-};
 
 const TitanStats = ({ stats }: TitanStatsProps) => {
   const items = [
     {
       label: 'Total connexions uniques',
       value: stats.uniqueConnections,
-      variant: 'variantSuccess',
+      variant: 'variantPrimary',
     },
     {
       label: 'Total connexions',
       value: stats.totalConnections,
-      variant: 'variantInfo',
+      variant: 'variantCyan',
     },
     {
       label: 'Tickets nouveau',
@@ -67,24 +65,15 @@ const TitanStats = ({ stats }: TitanStatsProps) => {
 };
 
 const TitanSection = () => {
-  const { enterprises } = useMarketData();
+  const enterprises = useAppSelector(getTitanCompanies);
+  const sessions = useAppSelector(getTitanSessions);
+  const ticketsStats = useAppSelector(getTitanTicketsStats);
+
   const chartContainerRef4 = useRef<HTMLDivElement | null>(null);
   const chartContainerRef5 = useRef<HTMLDivElement | null>(null);
+  const zendeskLabelRef = useRef<Highcharts.SVGElement | null>(null);
   const chartContainerRef6 = useRef<HTMLDivElement | null>(null);
   const chartContainerRef7 = useRef<HTMLDivElement | null>(null);
-  const [ticketsData, setTicketsData] = useState({
-    ticketNouveau: 0,
-    ticketOuvert: 0,
-    ticketEnAttente: 0,
-  });
-
-  useEffect(() => {
-    setTicketsData({
-      ticketNouveau: Math.floor(Math.random() * 30) + 10,
-      ticketOuvert: Math.floor(Math.random() * 50) + 30,
-      ticketEnAttente: Math.floor(Math.random() * 40) + 20,
-    });
-  }, []);
 
   const { stats, topClientsPie, topUsers, oracleMetrics, zendeskTickets } = useMemo(() => {
     const uniqueEnterprises = new Set<string>();
@@ -107,36 +96,22 @@ const TitanSection = () => {
       .sort((a, b) => b.count - a.count)
       .slice(0, 15);
 
-    const now = new Date();
-    const totalPoints = 48;
+    const timestamps = sessions.map((s) => new Date(s.timestamp).getTime());
+    const oracleSessions = sessions.map((s) => s.active_sessions);
+    const oracleCPU = sessions.map((s) => s.cpu_usage_percent);
 
-    const oracleData = Array.from({ length: totalPoints }, (_, index) => {
-      const i = totalPoints - 1 - index;
-      const time = new Date(now.getTime() - i * 30 * 60 * 1000);
-      const variance = Math.sin((i / totalPoints) * Math.PI * 2) * 40;
-      const randomness = (Math.random() - 0.5) * 20;
-      const session = Math.round(100 + variance + randomness);
-      const cpuVariance = Math.cos((i / totalPoints) * Math.PI * 2) * 20;
-      const cpuRandomness = (Math.random() - 0.5) * 10;
-      const cpu = Math.round(45 + cpuVariance + cpuRandomness);
-
-      return { timestamp: time.getTime(), session, cpu };
-    });
-
-    const timestamps = oracleData.map((d) => d.timestamp);
-    const oracleSessions = oracleData.map((d) => d.session);
-    const oracleCPU = oracleData.map((d) => d.cpu);
-
-    const totalTickets =
-      ticketsData.ticketOuvert + ticketsData.ticketNouveau + ticketsData.ticketEnAttente;
+    const ticketNouveau = Number(ticketsStats?.tickets_nouveau) || 0;
+    const ticketOuvert = Number(ticketsStats?.tickets_ouvert) || 0;
+    const ticketEnAttente = Number(ticketsStats?.tickets_en_attente) || 0;
+    const totalTickets = ticketOuvert + ticketNouveau + ticketEnAttente;
 
     return {
       stats: {
         uniqueConnections: uniqueEnterprises.size,
         totalConnections,
-        ticketsNouveau: ticketsData.ticketNouveau,
-        ticketsOuvert: ticketsData.ticketOuvert,
-        ticketsEnAttente: ticketsData.ticketEnAttente,
+        ticketsNouveau: ticketNouveau,
+        ticketsOuvert: ticketOuvert,
+        ticketsEnAttente: ticketEnAttente,
       },
       topClientsPie: topClientsPieData,
       topUsers: topUsersData,
@@ -148,13 +123,13 @@ const TitanSection = () => {
       zendeskTickets: {
         total: totalTickets,
         data: [
-          { name: 'Ouvert', y: ticketsData.ticketOuvert, color: '#f59e0b' },
-          { name: 'Nouveau', y: ticketsData.ticketNouveau, color: '#22c55e' },
-          { name: 'En attente', y: ticketsData.ticketEnAttente, color: '#3b82f6' },
+          { name: 'Ouvert', y: ticketOuvert, color: '#f59e0b' },
+          { name: 'Nouveau', y: ticketNouveau, color: '#22c55e' },
+          { name: 'En attente', y: ticketEnAttente, color: '#3b82f6' },
         ],
       },
     };
-  }, [enterprises, ticketsData]);
+  }, [enterprises, sessions, ticketsStats]);
 
   useEffect(() => {
     if (!chartContainerRef4.current || topClientsPie.length === 0) return;
@@ -436,55 +411,56 @@ const TitanSection = () => {
             const chart = this;
             const series = chart.series[0];
 
-            if (!chart.options.chart) return;
-
-            // Utilisation de any pour les propriétés custom Highcharts non typées
-            const chartCustom = chart.options.chart as {
-              custom?: { label?: Highcharts.SVGElement };
-            };
-
-            if (!chartCustom.custom) {
-              chartCustom.custom = {};
+            if (
+              !series.center ||
+              series.center[0] === undefined ||
+              series.center[1] === undefined
+            ) {
+              return;
             }
 
-            const customLabel =
-              chartCustom.custom.label ||
-              (() => {
-                const label = chart.renderer
-                  .text(
-                    `<div style="text-align: center; line-height: 1.2;">
-                      <div style="font-size: 14px; margin-bottom: 4px;">Total</div>
-                      <div style="font-size: 32px; font-weight: bold;">${zendeskTickets.total}</div>
-                    </div>`,
-                    0,
-                    0,
-                    true,
-                  )
-                  .css({
-                    color: '#ffffff',
-                    textAlign: 'center',
-                  })
-                  .add();
-                chartCustom.custom.label = label;
+            if (zendeskLabelRef.current) {
+              zendeskLabelRef.current.destroy();
+            }
 
-                return label;
-              })();
+            const centerX = series.center[0] + chart.plotLeft;
+            const centerY = series.center[1] + chart.plotTop;
 
-            if (series.center && series.center[0] !== undefined && series.center[1] !== undefined) {
-              const x = series.center[0] + chart.plotLeft;
-              const y = series.center[1] + chart.plotTop;
+            const group = chart.renderer.g().add();
 
-              // Centrer verticalement en tenant compte de la hauteur du label
-              const labelBox = customLabel.getBBox();
-              const yOffset = labelBox.height / 2;
-
-              customLabel.attr({
-                x,
-                y: y - yOffset,
+            chart.renderer
+              .text('Total', 0, 0)
+              .css({
+                color: '#ffffff',
+                fontSize: '14px',
+                textAlign: 'center',
+              })
+              .attr({
                 'text-anchor': 'middle',
-                align: 'center',
-              });
-            }
+              })
+              .add(group);
+
+            chart.renderer
+              .text(String(zendeskTickets.total), 0, 30)
+              .css({
+                color: '#ffffff',
+                fontSize: '32px',
+                fontWeight: 'bold',
+                textAlign: 'center',
+              })
+              .attr({
+                'text-anchor': 'middle',
+              })
+              .add(group);
+
+            const groupBox = group.getBBox();
+
+            group.attr({
+              translateX: centerX - groupBox.width / 2 - groupBox.x,
+              translateY: centerY - groupBox.height / 2 - groupBox.y,
+            });
+
+            zendeskLabelRef.current = group;
           },
         },
       },
@@ -561,16 +537,6 @@ const TitanSection = () => {
   );
 };
 
-const _excelSerialToDate = (serial: string) => {
-  const n = Number(serial);
-
-  if (!Number.isFinite(n) || n <= 0) return null;
-
-  const ms = (n - 25569) * 86400000;
-
-  return new Date(ms);
-};
-
 const MarketDataSection = () => {
   return (
     <ErrorBoundary>
@@ -583,7 +549,10 @@ const MarketDataSection = () => {
 };
 
 const Dashboard = () => {
-  const { error } = useMarketData();
+  const titanError = useAppSelector(getTitanError);
+
+  const error = titanError;
+
   return (
     <Layout title="Dashboard" hideHeader>
       <div className={styles.pageContainer}>

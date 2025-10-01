@@ -1,15 +1,16 @@
-import { MarketDataStatus } from '@/features/weather-status/types/index.types';
+import { memo } from 'react';
+
+import type { MarketDataStatus } from '@/types/MarketData.types';
 
 import StatusIcon from './StatusIcon';
-import { memo } from 'react';
 
 import styles from '@/styles/components/ui/StatusBadge.module.scss';
 
-interface StatusBadgeProps {
+type StatusBadgeProps = {
   status: MarketDataStatus;
   showText?: boolean;
   size?: 'small' | 'medium' | 'large';
-}
+};
 
 const StatusBadge = ({ status, showText = true, size = 'medium' }: StatusBadgeProps) => {
   const getStatusText = (status: MarketDataStatus): string => {

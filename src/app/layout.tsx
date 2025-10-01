@@ -1,8 +1,12 @@
-import './globals.css';
-import { LanguageProvider } from '@/i18n';
-import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import type { Metadata, Viewport } from 'next';
+
+import { LanguageProvider } from '@/i18n';
+import { StoreProvider } from '@/stores';
+
+import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import { HtmlLangUpdater } from '@/components/layout';
+
+import './globals.css';
 
 export const metadata: Metadata = {
   title: {
@@ -41,10 +45,7 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export function reportWebVitals(_metric: unknown) {
-  // Relais minimal des Web Vitals (pluggez ici un endpoint ou analytics)
-  // console.log(metric);
-}
+export function reportWebVitals(_metric: unknown) {}
 
 const RootLayout = ({
   children,
@@ -54,10 +55,12 @@ const RootLayout = ({
   return (
     <html lang="fr">
       <body>
-        <LanguageProvider>
-          <HtmlLangUpdater />
-          <ErrorBoundary>{children}</ErrorBoundary>
-        </LanguageProvider>
+        <StoreProvider>
+          <LanguageProvider>
+            <HtmlLangUpdater />
+            <ErrorBoundary>{children}</ErrorBoundary>
+          </LanguageProvider>
+        </StoreProvider>
       </body>
     </html>
   );
