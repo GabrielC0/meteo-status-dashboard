@@ -1,7 +1,7 @@
 import mysql from 'mysql2/promise';
 import bcrypt from 'bcryptjs';
 import pool from './config';
-import type { User, CreateUserData, UpdateUserData } from '@/types';
+import type { User } from '@/types';
 
 type DbUserRow = mysql.RowDataPacket & User;
 
@@ -12,13 +12,17 @@ export class UserService {
     this.pool = pool;
   }
 
-  createUser = async (userData: CreateUserData): Promise<User> => {
-    const hashedPassword = await bcrypt.hash(userData.password, 10);
+  createUser = async (
+    email: string,
+    password: string,
+    role: 'admin' | 'user' = 'user',
+  ): Promise<User> => {
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const [result] = await this.pool.execute<mysql.ResultSetHeader>(
-      `INSERT INTO users (email, password, name, role, is_active) 
-       VALUES (?, ?, ?, ?, ?)`,
-      [userData.email, hashedPassword, userData.name, userData.role, true],
+      `INSERT INTO users (email, password, name, role, is_active, created_at, updated_at) 
+       VALUES (?, ?, ?, ?, ?, NOW(), NOW())`,
+      [email, hashedPassword, email.split('@')[0], role, true],
     );
 
     const user = await this.getUserById(result.insertId);
@@ -40,66 +44,6 @@ export class UserService {
     return rows.length > 0 ? rows[0] : null;
   };
 
-  getAllUsers = async (): Promise<User[]> => {
-    const [rows] = await this.pool.execute<DbUserRow[]>(
-      'SELECT * FROM users ORDER BY created_at DESC',
-    );
-    return rows;
-  };
-
-  updateUser = async (id: number, userData: UpdateUserData): Promise<User | null> => {
-    const updates: string[] = [];
-    const values: (string | number | boolean)[] = [];
-
-    if (userData.email !== undefined) {
-      updates.push('email = ?');
-      values.push(userData.email);
-    }
-
-    if (userData.password !== undefined && userData.password !== '') {
-      const hashedPassword = await bcrypt.hash(userData.password, 10);
-      updates.push('password = ?');
-      values.push(hashedPassword);
-    }
-
-    if (userData.name !== undefined) {
-      updates.push('name = ?');
-      values.push(userData.name);
-    }
-
-    if (userData.role !== undefined) {
-      updates.push('role = ?');
-      values.push(userData.role);
-    }
-
-    if (userData.is_active !== undefined) {
-      updates.push('is_active = ?');
-      values.push(userData.is_active);
-    }
-
-    if (updates.length === 0) {
-      return this.getUserById(id);
-    }
-
-    updates.push('updated_at = NOW()');
-    values.push(id);
-
-    await this.pool.execute<mysql.ResultSetHeader>(
-      `UPDATE users SET ${updates.join(', ')} WHERE id = ?`,
-      values,
-    );
-
-    return this.getUserById(id);
-  };
-
-  deleteUser = async (id: number): Promise<boolean> => {
-    const [result] = await this.pool.execute<mysql.ResultSetHeader>(
-      'DELETE FROM users WHERE id = ?',
-      [id],
-    );
-    return result.affectedRows > 0;
-  };
-
   verifyCredentials = async (email: string, password: string): Promise<User | null> => {
     const user = await this.getUserByEmail(email);
 
@@ -109,14 +53,6 @@ export class UserService {
 
     const isValid = await bcrypt.compare(password, user.password);
     return isValid ? user : null;
-  };
-
-  updateLastLogin = async (id: number): Promise<void> => {
-    await this.pool.execute('UPDATE users SET last_login = NOW() WHERE id = ?', [id]);
-  };
-
-  close = async (): Promise<void> => {
-    await this.pool.end();
   };
 }
 

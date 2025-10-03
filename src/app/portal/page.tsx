@@ -2,128 +2,114 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useDispatch, useSelector } from 'react-redux';
-import { useAuth } from '@/hooks/useAuth';
 
 import { PageLayout } from '@/components/layout/PageLayout';
-import { LogoutIcon } from '@/components/Icons';
-import { logout, setUser, getUser } from '@/app/redux/reducers/loginRed';
-import type { AppDispatch, RootState } from '@/stores';
 
-import userInfoStyles from './PortalUserInfo.module.scss';
+type User = {
+  id: number;
+  email: string;
+  role: string;
+};
 
 const PortalPage = () => {
-  const [currentTime, setCurrentTime] = useState<string>('');
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-  const dispatch = useDispatch<AppDispatch>();
-  const { session, userRole } = useAuth({ requireAuth: true, allowedRoles: ['admin', 'user'] });
-  const user = useSelector((state: RootState) => getUser(state));
 
   useEffect(() => {
-    const updateTime = () => {
-      setCurrentTime(new Date().toLocaleTimeString('fr-FR'));
+    // Vérifier l'authentification une seule fois
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/auth/me');
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data.user);
+        } else {
+          // Non authentifié, rediriger vers login
+          router.push('/login');
+        }
+      } catch (_error) {
+        router.push('/login');
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
+    checkAuth();
+  }, [router]);
 
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    if (session?.user && !user) {
-      dispatch(
-        setUser({
-          id: 1,
-          email: session.user.email || '',
-          role: userRole || 'user',
-        }),
-      );
-    }
-  }, [session, user, userRole, dispatch]);
-
-  const handleSignOut = () => {
-    dispatch(logout());
+  const handleLogout = async () => {
+    await fetch('/api/logout', { method: 'POST' });
     router.push('/login');
   };
 
+  if (isLoading) {
+    return (
+      <PageLayout>
+        <div style={{ textAlign: 'center', color: 'white', padding: '2rem' }}>
+          <h2>Chargement...</h2>
+        </div>
+      </PageLayout>
+    );
+  }
+
   if (!user) {
-    return <div className={userInfoStyles.userInfo__loading}>Chargement...</div>;
+    return (
+      <PageLayout>
+        <div style={{ textAlign: 'center', color: 'white', padding: '2rem' }}>
+          <h2>Redirection vers la page de connexion...</h2>
+        </div>
+      </PageLayout>
+    );
   }
 
   return (
     <PageLayout>
-      <div className={userInfoStyles.userInfo}>
-        <span className={userInfoStyles.userInfo__session}>
-          <div className={userInfoStyles.userInfo__statusIndicator}></div>
-          <span>
-            Connecté en tant que{' '}
-            <strong className={userInfoStyles.userInfo__userName}>{user.email}</strong>
-          </span>
-        </span>
-        <button
-          onClick={handleSignOut}
-          className={userInfoStyles.userInfo__logoutButton}
-          title="Déconnexion"
-        >
-          <LogoutIcon width={16} height={16} className={userInfoStyles.userInfo__logoutIcon} />
-        </button>
-      </div>
-
-      <div
-        style={{
-          padding: '2rem',
-          color: 'white',
-          textAlign: 'center',
-          background: 'rgba(255, 255, 255, 0.05)',
-          borderRadius: '12px',
-          backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-        }}
-      >
-        <h1>Portal Client</h1>
-        <p>Consultez les statuts des services et la qualité des données en temps réel.</p>
+      <div style={{ padding: '2rem', color: 'white' }}>
         <div
           style={{
-            marginTop: '2rem',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '1rem',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '2rem',
+            padding: '1rem',
+            background: 'rgba(255, 255, 255, 0.05)',
+            borderRadius: '8px',
           }}
         >
-          <div
+          <div>
+            <h1>Portal Client</h1>
+            <p>
+              Connecté en tant que : <strong>{user.email}</strong> ({user.role})
+            </p>
+          </div>
+          <button
+            onClick={handleLogout}
             style={{
-              padding: '1rem',
-              background: 'rgba(40, 167, 69, 0.1)',
-              borderRadius: '8px',
-              border: '1px solid rgba(40, 167, 69, 0.3)',
+              padding: '0.5rem 1rem',
+              background: '#dc2626',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
             }}
           >
-            <h3>Services TITAN</h3>
-            <p>Opérationnel</p>
-          </div>
-          <div
-            style={{
-              padding: '1rem',
-              background: 'rgba(40, 167, 69, 0.1)',
-              borderRadius: '8px',
-              border: '1px solid rgba(40, 167, 69, 0.3)',
-            }}
-          >
-            <h3>Données de Marché</h3>
-            <p>Actives</p>
-          </div>
-          <div
-            style={{
-              padding: '1rem',
-              background: 'rgba(40, 167, 69, 0.1)',
-              borderRadius: '8px',
-              border: '1px solid rgba(40, 167, 69, 0.3)',
-            }}
-          >
-            <h3>Dernière Mise à Jour</h3>
-            <p>{currentTime || 'Chargement...'}</p>
-          </div>
+            Déconnexion
+          </button>
+        </div>
+
+        <div
+          style={{
+            background: 'rgba(255, 255, 255, 0.05)',
+            borderRadius: '8px',
+            padding: '2rem',
+            textAlign: 'center',
+          }}
+        >
+          <h2>🚀 Portal Client</h2>
+          <p>Consultez les statuts des services et la qualité des données en temps réel.</p>
+          <p>✅ Accès utilisateur autorisé</p>
+          <p>✅ Système d'authentification ultra-simplifié</p>
         </div>
       </div>
     </PageLayout>

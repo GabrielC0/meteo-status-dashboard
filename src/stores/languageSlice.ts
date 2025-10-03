@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { Locale } from '@/i18n/messages';
 
-type LanguageState = {
-  locale: Locale | null;
-};
+type Locale = 'fr' | 'en' | 'es' | 'pt' | 'it';
+
+interface LanguageState {
+  currentLocale: Locale;
+}
 
 const initialState: LanguageState = {
-  locale: null,
+  currentLocale: 'fr',
 };
 
 const languageSlice = createSlice({
@@ -14,17 +15,18 @@ const languageSlice = createSlice({
   initialState,
   reducers: {
     setLocale: (state, action: PayloadAction<Locale>) => {
-      state.locale = action.payload;
+      state.currentLocale = action.payload;
     },
     clearLanguageData: (state) => {
-      state.locale = null;
+      state.currentLocale = 'fr';
     },
   },
 });
 
 export const { setLocale, clearLanguageData } = languageSlice.actions;
 
-export const getCurrentLocale = (state: { language: LanguageState }): Locale | null =>
-  state.language.locale;
+// Selectors
+export const getCurrentLocale = (state: { language: LanguageState }) =>
+  state.language.currentLocale;
 
 export default languageSlice.reducer;

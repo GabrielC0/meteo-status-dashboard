@@ -1,21 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useDispatch, useSelector } from 'react-redux';
-import { signIn } from 'next-auth/react';
 
 import { PageLayout } from '@/components/layout/PageLayout';
-import {
-  login,
-  setSessionToken,
-  setWebSocketPath,
-  setLoginTime,
-  setUser,
-  restoreFromStorage,
-  getIsLoggedIn,
-} from '@/app/redux/reducers/loginRed';
-import type { AppDispatch, RootState } from '@/stores';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -23,21 +11,6 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
-  const dispatch = useDispatch<AppDispatch>();
-  const isLoggedIn = useSelector((state: RootState) => getIsLoggedIn(state));
-
-  useEffect(() => {
-    dispatch(restoreFromStorage());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      const timer = setTimeout(() => {
-        router.push('/admin');
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [isLoggedIn, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,63 +18,35 @@ const LoginPage = () => {
     setError('');
 
     try {
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
       });
 
-      if (result?.error) {
-        throw new Error('Identifiants incorrects');
-      }
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Connexion réussie:', data);
 
-      if (result?.ok) {
-        const sessionToken = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
-        const userResponse = await fetch('/api/auth/user-info', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email }),
-        });
-
-        if (!userResponse.ok) {
-          const errorText = await userResponse.text();
-          throw new Error(
-            'Erreur lors de la récupération des informations utilisateur' + errorText,
-          );
+        // Redirection basée sur le rôle
+        if (data.user?.role === 'admin') {
+          console.log('Redirection vers /admin');
+          window.location.href = '/admin';
+        } else {
+          console.log('Redirection vers /portal');
+          window.location.href = '/portal';
         }
-
-        const user = await userResponse.json();
-
-        dispatch(setSessionToken(sessionToken));
-        dispatch(setWebSocketPath('/api/websocket'));
-        dispatch(setLoginTime(Date.now()));
-        dispatch(setUser(user));
-        dispatch(login());
-
-        router.push('/admin');
       } else {
-        throw new Error('Erreur de connexion');
+        const errorData = await response.json();
+        console.log('Erreur de connexion:', errorData);
+        setError(errorData.error || 'Erreur de connexion');
       }
     } catch (error) {
-      console.error('Erreur de connexion:', error);
-      setError('Email ou mot de passe incorrect');
+      setError('Erreur de connexion');
+    } finally {
       setIsLoading(false);
     }
   };
-
-  if (isLoggedIn) {
-    return (
-      <PageLayout>
-        <div style={{ textAlign: 'center', color: 'white', padding: '2rem' }}>
-          <h2>Redirection en cours...</h2>
-          <p>Vous allez être redirigé vers le tableau de bord dans quelques secondes.</p>
-        </div>
-      </PageLayout>
-    );
-  }
 
   return (
     <PageLayout>

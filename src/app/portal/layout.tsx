@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 
 import { generateMetadata } from '@/components/layout/MetadataLayout';
-import { RequireUserAuth } from '@/components/RequireUserAuth';
 import type { LayoutProps } from '@/types/Layout.types';
 
 export const metadata: Metadata = generateMetadata(
@@ -10,7 +9,7 @@ export const metadata: Metadata = generateMetadata(
 );
 
 const PortalLayout = ({ children }: LayoutProps) => {
-  return <RequireUserAuth>{children}</RequireUserAuth>;
+  return <>{children}</>;
 };
 
 export default PortalLayout;

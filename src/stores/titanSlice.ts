@@ -1,6 +1,42 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 
-import type { TitanState } from '@/types/Titan.types';
+// Types
+interface MarketDataOperation {
+  operation_type: string;
+  devise1: string;
+  devise2?: string;
+  type_recuperation: string;
+  last_market_data_update: string;
+  status: 'SUCCESS' | 'WARNING' | 'ERROR' | 'UNKNOWN';
+}
+
+interface TitanCompany {
+  id: number;
+  name: string;
+  marketDataStatus: 'SUCCESS' | 'WARNING' | 'ERROR' | 'UNKNOWN';
+  operations: MarketDataOperation[];
+}
+
+interface TitanSession {
+  timestamp: string;
+  active_sessions: number;
+  cpu_usage_percent: number;
+  memory_usage_mb: number;
+}
+
+interface TitanTicketsStats {
+  tickets_nouveau: number;
+  tickets_ouvert: number;
+  tickets_en_attente: number;
+}
+
+interface TitanState {
+  companies: TitanCompany[];
+  sessions: TitanSession[];
+  ticketsStats: TitanTicketsStats | null;
+  isLoading: boolean;
+  error: string | null;
+}
 
 const initialState: TitanState = {
   companies: [],
@@ -8,23 +44,123 @@ const initialState: TitanState = {
   ticketsStats: null,
   isLoading: false,
   error: null,
-  lastUpdate: null,
 };
 
-export const fetchTitanData = createAsyncThunk('titan/fetchAll', async () => {
-  const response = await fetch('/api/titan-data');
+// Données mockées pour le dashboard
+const mockCompanies: TitanCompany[] = [
+  {
+    id: 1,
+    name: 'Banque A',
+    marketDataStatus: 'SUCCESS',
+    operations: [
+      {
+        operation_type: 'FXCROSS',
+        devise1: 'EUR',
+        devise2: 'USD',
+        type_recuperation: 'REALTIME',
+        last_market_data_update: '2024-01-15T10:30:00Z',
+        status: 'SUCCESS',
+      },
+      {
+        operation_type: 'PTSWAP',
+        devise1: 'GBP',
+        devise2: 'EUR',
+        type_recuperation: 'REALTIME',
+        last_market_data_update: '2024-01-15T10:25:00Z',
+        status: 'SUCCESS',
+      },
+    ],
+  },
+  {
+    id: 2,
+    name: 'Banque B',
+    marketDataStatus: 'WARNING',
+    operations: [
+      {
+        operation_type: 'FXCROSS',
+        devise1: 'USD',
+        devise2: 'JPY',
+        type_recuperation: 'BATCH',
+        last_market_data_update: '2024-01-15T09:45:00Z',
+        status: 'WARNING',
+      },
+    ],
+  },
+  {
+    id: 3,
+    name: 'Banque C',
+    marketDataStatus: 'ERROR',
+    operations: [
+      {
+        operation_type: 'PTSWAP',
+        devise1: 'CHF',
+        devise2: 'EUR',
+        type_recuperation: 'REALTIME',
+        last_market_data_update: '2024-01-15T08:15:00Z',
+        status: 'ERROR',
+      },
+    ],
+  },
+  {
+    id: 4,
+    name: 'Institution D',
+    marketDataStatus: 'SUCCESS',
+    operations: [
+      {
+        operation_type: 'FXCROSS',
+        devise1: 'EUR',
+        devise2: 'GBP',
+        type_recuperation: 'REALTIME',
+        last_market_data_update: '2024-01-15T10:20:00Z',
+        status: 'SUCCESS',
+      },
+      {
+        operation_type: 'PTSWAP',
+        devise1: 'USD',
+        devise2: 'CAD',
+        type_recuperation: 'BATCH',
+        last_market_data_update: '2024-01-15T09:30:00Z',
+        status: 'SUCCESS',
+      },
+      {
+        operation_type: 'FXCROSS',
+        devise1: 'AUD',
+        devise2: 'NZD',
+        type_recuperation: 'REALTIME',
+        last_market_data_update: '2024-01-15T10:10:00Z',
+        status: 'SUCCESS',
+      },
+    ],
+  },
+];
 
-  if (!response.ok) {
-    throw new Error('Erreur lors du chargement des données TITAN');
+const mockSessions: TitanSession[] = Array.from({ length: 24 }, (_, i) => ({
+  timestamp: new Date(Date.now() - (23 - i) * 60 * 60 * 1000).toISOString(),
+  active_sessions: Math.floor(Math.random() * 100) + 50,
+  cpu_usage_percent: Math.floor(Math.random() * 80) + 10,
+  memory_usage_mb: Math.floor(Math.random() * 1000) + 500,
+}));
+
+const mockTicketsStats: TitanTicketsStats = {
+  tickets_nouveau: 12,
+  tickets_ouvert: 8,
+  tickets_en_attente: 5,
+};
+
+// Async thunk pour charger les données
+export const fetchTitanData = createAsyncThunk('titan/fetchAll', async (_, { rejectWithValue }) => {
+  try {
+    // Simuler un délai de chargement
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    return {
+      companies: mockCompanies,
+      sessions: mockSessions,
+      ticketsStats: mockTicketsStats,
+    };
+  } catch (error) {
+    return rejectWithValue('Erreur lors du chargement des données TITAN');
   }
-
-  const result = await response.json();
-
-  return {
-    companies: result.data.companies || [],
-    sessions: result.data.sessions || [],
-    ticketsStats: result.data.ticketsStats || null,
-  };
 });
 
 const titanSlice = createSlice({
@@ -49,18 +185,18 @@ const titanSlice = createSlice({
         state.companies = action.payload.companies;
         state.sessions = action.payload.sessions;
         state.ticketsStats = action.payload.ticketsStats;
-        state.lastUpdate = new Date().toISOString();
         state.error = null;
       })
       .addCase(fetchTitanData.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || 'Erreur inconnue';
+        state.error = action.payload as string;
       });
   },
 });
 
 export const { clearTitanData } = titanSlice.actions;
 
+// Selectors
 export const getTitanCompanies = (state: { titan: TitanState }) => state.titan.companies;
 export const getTitanSessions = (state: { titan: TitanState }) => state.titan.sessions;
 export const getTitanTicketsStats = (state: { titan: TitanState }) => state.titan.ticketsStats;

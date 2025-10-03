@@ -1,9 +1,30 @@
 'use client';
 
-import { AutoRedirect } from '@/components/AutoRedirect';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const HomePage = () => {
-  return <AutoRedirect />;
+  const router = useRouter();
+
+  useEffect(() => {
+    // Redirection simple vers la page de login
+    router.push('/login');
+  }, [router]);
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        color: 'white',
+        fontSize: '1.2rem',
+      }}
+    >
+      Redirection vers la page de connexion...
+    </div>
+  );
 };
 
 export default HomePage;

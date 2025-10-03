@@ -2,7 +2,6 @@
 
 import { IntlProvider } from 'react-intl';
 
-import { useAppSelector, getCurrentLocale } from '@/stores';
 import { messages } from '@/i18n/messages';
 
 type IntlProviderProps = {
@@ -18,9 +17,8 @@ const getMessages = (locale: string) => {
 };
 
 export const IntlProviderWrapper = ({ children }: IntlProviderProps) => {
-  const locale = useAppSelector(getCurrentLocale);
-
-  const currentLocale = locale || navigator?.language?.split('-')[0] || 'fr';
+  // Langue fixée en français pour simplifier
+  const currentLocale = 'fr';
 
   return (
     <IntlProvider locale={currentLocale} messages={getMessages(currentLocale)} defaultLocale="fr">

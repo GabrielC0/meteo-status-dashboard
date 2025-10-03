@@ -1,11 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 
-import { StoreProvider } from '@/stores';
-
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
-import { HtmlLangUpdater } from '@/components/layout';
 import { IntlProviderWrapper } from '@/components/IntlProvider';
-import { SessionProviderWrapper } from '@/components/providers/SessionProviderWrapper';
 
 import './globals.css';
 
@@ -54,14 +50,9 @@ const RootLayout = ({
   return (
     <html lang="fr">
       <body>
-        <SessionProviderWrapper>
-          <StoreProvider>
-            <IntlProviderWrapper>
-              <HtmlLangUpdater />
-              <ErrorBoundary>{children}</ErrorBoundary>
-            </IntlProviderWrapper>
-          </StoreProvider>
-        </SessionProviderWrapper>
+        <IntlProviderWrapper>
+          <ErrorBoundary>{children}</ErrorBoundary>
+        </IntlProviderWrapper>
       </body>
     </html>
   );

@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 
 import { generateMetadata } from '@/components/layout/MetadataLayout';
-import { RequireAuth } from '@/components/RequireAuth';
 import type { LayoutProps } from '@/types/Layout.types';
 
 export const metadata: Metadata = generateMetadata(
@@ -10,7 +9,7 @@ export const metadata: Metadata = generateMetadata(
 );
 
 const AdminLayout = ({ children }: LayoutProps) => {
-  return <RequireAuth>{children}</RequireAuth>;
+  return <>{children}</>;
 };
 
 export default AdminLayout;
