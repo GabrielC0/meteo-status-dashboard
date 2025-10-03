@@ -2,6 +2,31 @@ import { query } from './config';
 import type { QueryParams } from '@/types/Database.types';
 import type { Ticket, TicketStatus, TicketPriority, TicketRow } from '@/types/Tickets.types';
 
+const mapTicketStatus = (value: string): TicketStatus => {
+  switch (value) {
+    case 'nouveau':
+    case 'ouvert':
+    case 'en_attente':
+    case 'resolu':
+    case 'ferme':
+      return value;
+    default:
+      return 'nouveau';
+  }
+};
+
+const mapTicketPriority = (value: string): TicketPriority => {
+  switch (value) {
+    case 'low':
+    case 'medium':
+    case 'high':
+    case 'urgent':
+      return value;
+    default:
+      return 'medium';
+  }
+};
+
 export const getAllTickets = async (filters?: {
   status?: TicketStatus[];
   priority?: TicketPriority[];
@@ -41,23 +66,18 @@ export const getAllTickets = async (filters?: {
 
     const tickets = await query<TicketRow[]>(finalSql, params);
 
-    return tickets.map((t) => {
-      const status = t.status as TicketStatus;
-      const priority = t.priority as TicketPriority;
-
-      return {
-        id: t.id,
-        ticketNumber: t.ticket_number,
-        status,
-        priority,
-        title: t.title,
-        description: t.description,
-        assignee: t.assignee,
-        createdAt: t.created_at.toISOString(),
-        updatedAt: t.updated_at.toISOString(),
-        resolvedAt: t.resolved_at?.toISOString() || null,
-      };
-    });
+    return tickets.map((t) => ({
+      id: t.id,
+      ticketNumber: t.ticket_number,
+      status: mapTicketStatus(t.status),
+      priority: mapTicketPriority(t.priority),
+      title: t.title,
+      description: t.description,
+      assignee: t.assignee,
+      createdAt: t.created_at.toISOString(),
+      updatedAt: t.updated_at.toISOString(),
+      resolvedAt: t.resolved_at?.toISOString() || null,
+    }));
   } catch (error) {
     console.error('❌ Erreur lors de la récupération des tickets:', error);
     throw error;
@@ -79,14 +99,11 @@ export const getTicketByNumber = async (ticketNumber: string): Promise<Ticket | 
       return null;
     }
 
-    const status = ticket.status as TicketStatus;
-    const priority = ticket.priority as TicketPriority;
-
     return {
       id: ticket.id,
       ticketNumber: ticket.ticket_number,
-      status,
-      priority,
+      status: mapTicketStatus(ticket.status),
+      priority: mapTicketPriority(ticket.priority),
       title: ticket.title,
       description: ticket.description,
       assignee: ticket.assignee,

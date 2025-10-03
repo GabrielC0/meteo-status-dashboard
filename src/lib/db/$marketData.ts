@@ -45,6 +45,7 @@ export const getAllCompaniesWithOperations = async (): Promise<MarketDataCompany
         devise1: op.devise1,
         devise2: op.devise2 || undefined,
         typeRecuperation: op.type_recuperation,
+        status: op.status,
       });
     }
 
@@ -99,6 +100,7 @@ export const getCompanyByCode = async (companyCode: string): Promise<MarketDataC
         devise1: op.devise1,
         devise2: op.devise2 || undefined,
         typeRecuperation: op.type_recuperation,
+        status: op.status,
       })),
     };
   } catch (error) {

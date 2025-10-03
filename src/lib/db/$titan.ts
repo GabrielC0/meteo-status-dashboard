@@ -6,6 +6,40 @@ import type {
   TitanSessionRow,
 } from '@/types/Titan.types';
 
+const mapServiceType = (value: string): TitanService['service_type'] => {
+  switch (value) {
+    case 'API':
+    case 'AUTH':
+    case 'DATABASE':
+    case 'CACHE':
+      return value;
+    default:
+      return 'OTHER';
+  }
+};
+
+const mapServiceStatus = (value: string): TitanService['status'] => {
+  switch (value) {
+    case 'operational':
+    case 'degraded':
+    case 'outage':
+    case 'maintenance':
+      return value;
+    default:
+      return 'operational';
+  }
+};
+
+const parseDependencies = (raw: string | null): string[] | null => {
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.map(String) : null;
+  } catch {
+    return null;
+  }
+};
+
 export const getAllServices = async (): Promise<TitanService[]> => {
   try {
     const services = await query<TitanServiceRow[]>(
@@ -16,23 +50,18 @@ export const getAllServices = async (): Promise<TitanService[]> => {
       ORDER BY service_name ASC`,
     );
 
-    return services.map((s) => {
-      const serviceType = s.service_type as TitanService['service_type'];
-      const status = s.status as TitanService['status'];
-
-      return {
-        id: s.id,
-        service_code: s.service_code,
-        service_name: s.service_name,
-        service_type: serviceType,
-        status: status,
-        uptime_percentage: Number(s.uptime_percentage),
-        last_check: s.last_check.toISOString(),
-        response_time_ms: s.response_time_ms,
-        description: s.description,
-        dependencies: s.dependencies ? JSON.parse(s.dependencies) : null,
-      };
-    });
+    return services.map((s) => ({
+      id: s.id,
+      service_code: s.service_code,
+      service_name: s.service_name,
+      service_type: mapServiceType(s.service_type),
+      status: mapServiceStatus(s.status),
+      uptime_percentage: Number(s.uptime_percentage),
+      last_check: s.last_check.toISOString(),
+      response_time_ms: s.response_time_ms,
+      description: s.description,
+      dependencies: parseDependencies(s.dependencies),
+    }));
   } catch (error) {
     console.error('❌ Erreur lors de la récupération des services TITAN:', error);
     throw error;

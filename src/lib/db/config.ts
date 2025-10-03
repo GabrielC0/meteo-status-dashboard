@@ -1,6 +1,6 @@
 import mysql, { type PoolConnection } from 'mysql2/promise';
 
-import type { PoolInternal, PoolStats, QueryParams } from '@/types/Database.types';
+import type { PoolStats, QueryParams, PoolInternal } from '@/types/Database.types';
 
 const dbConfig = {
   host: process.env.DB_HOST || 'localhost',

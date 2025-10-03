@@ -71,6 +71,23 @@
     padding-right: 8px;
   }
 
+  &__statsGridCenter {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-width: 720px;
+    width: 100%;
+    margin: 0 auto;
+
+    @media (max-width: 900px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      max-width: 480px;
+    }
+
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+      max-width: 320px;
+    }
+  }
+
   &__chartsScrollContainer {
     display: flex;
     flex-direction: column;
@@ -264,8 +281,6 @@
   }
 }
 
-// Alias pour compatibilité - Suppression des directives stylelint-disable car l'utilisateur les a retirées
-// stylelint-disable scss/at-extend-no-missing-placeholder
 .pageContainer {
   @extend .dashboard__pageContainer;
 }
@@ -341,4 +356,3 @@
 .error {
   @extend .dashboard__error;
 }
-// stylelint-enable scss/at-extend-no-missing-placeholder

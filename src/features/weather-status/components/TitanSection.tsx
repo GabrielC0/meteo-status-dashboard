@@ -1,7 +1,7 @@
 'use client';
 
-import { memo, useEffect, useMemo, useRef } from 'react';
-import Highcharts from 'highcharts';
+import { memo, useMemo } from 'react';
+
 import {
   getTitanCompanies,
   getTitanSessions,
@@ -9,19 +9,15 @@ import {
   useAppSelector,
 } from '@/stores';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
+import ChartWrapper from '@/components/ui/ChartWrapper';
 import TitanStats from './TitanStats';
+
 import styles from '@/styles/features/weather-status/components/Dashboard.module.scss';
 
 const TitanSection = () => {
   const enterprises = useAppSelector(getTitanCompanies);
   const sessions = useAppSelector(getTitanSessions);
   const ticketsStats = useAppSelector(getTitanTicketsStats);
-
-  const chartContainerRef4 = useRef<HTMLDivElement | null>(null);
-  const chartContainerRef5 = useRef<HTMLDivElement | null>(null);
-  const zendeskLabelRef = useRef<Highcharts.SVGElement | null>(null);
-  const chartContainerRef6 = useRef<HTMLDivElement | null>(null);
-  const chartContainerRef7 = useRef<HTMLDivElement | null>(null);
 
   const { stats, topClientsPie, topUsers, oracleMetrics, zendeskTickets } = useMemo(() => {
     const uniqueEnterprises = new Set<string>();
@@ -79,386 +75,6 @@ const TitanSection = () => {
     };
   }, [enterprises, sessions, ticketsStats]);
 
-  useEffect(() => {
-    if (!chartContainerRef4.current || topClientsPie.length === 0) return;
-
-    const chartOptions: Highcharts.Options = {
-      chart: {
-        type: 'pie',
-        backgroundColor: 'transparent',
-        height: 450,
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.3)',
-        borderRadius: 8,
-      },
-      title: {
-        text: 'Top 15 clients',
-        style: { color: '#ffffff', fontSize: '18px' },
-      },
-      plotOptions: {
-        pie: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          dataLabels: {
-            enabled: true,
-            format: '<b>{point.name}</b>: {point.percentage:.1f}%',
-            style: { color: '#ffffff', fontSize: '12px' },
-          },
-          colors: [
-            '#10b981',
-            '#14b8a6',
-            '#06b6d4',
-            '#0ea5e9',
-            '#3b82f6',
-            '#6366f1',
-            '#8b5cf6',
-            '#a855f7',
-            '#d946ef',
-            '#ec4899',
-            '#f43f5e',
-            '#ef4444',
-            '#f97316',
-            '#f59e0b',
-            '#eab308',
-          ],
-        },
-      },
-      series: [
-        {
-          type: 'pie',
-          name: 'Opérations',
-          data: topClientsPie.map((item) => ({
-            name: item.name,
-            y: item.count,
-          })),
-        },
-      ],
-      credits: { enabled: false },
-    };
-
-    const chart = Highcharts.chart(chartContainerRef4.current, chartOptions);
-
-    return () => {
-      chart?.destroy();
-    };
-  }, [topClientsPie]);
-
-  useEffect(() => {
-    if (!chartContainerRef5.current || topUsers.length === 0) return;
-
-    const chartOptions: Highcharts.Options = {
-      chart: {
-        type: 'bar',
-        backgroundColor: 'transparent',
-        height: 500,
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.3)',
-        borderRadius: 8,
-        spacingRight: 10,
-        spacingBottom: 10,
-      },
-      title: {
-        text: 'Top 15 utilisateurs',
-        style: { color: '#ffffff', fontSize: '18px' },
-      },
-      xAxis: {
-        type: 'category',
-        labels: {
-          style: { fontSize: '12px', color: '#ffffff' },
-        },
-      },
-      yAxis: {
-        min: 0,
-        title: { text: 'Opérations (nb)', style: { color: '#ffffff' } },
-        labels: { style: { color: '#ffffff' } },
-      },
-      legend: { enabled: false },
-      tooltip: {
-        enabled: false,
-      },
-      plotOptions: {
-        bar: {
-          dataLabels: {
-            enabled: true,
-            style: { color: '#ffffff', fontSize: '12px', fontWeight: 'bold' },
-          },
-          borderWidth: 0,
-          states: {
-            hover: {
-              enabled: false,
-            },
-            inactive: {
-              enabled: false,
-            },
-          },
-          enableMouseTracking: false,
-        },
-      },
-      series: [
-        {
-          type: 'bar',
-          name: 'Utilisateurs',
-          colorByPoint: true,
-          colors: [
-            '#10b981',
-            '#14b8a6',
-            '#06b6d4',
-            '#0ea5e9',
-            '#3b82f6',
-            '#6366f1',
-            '#8b5cf6',
-            '#a855f7',
-            '#d946ef',
-            '#ec4899',
-            '#f43f5e',
-            '#ef4444',
-            '#f97316',
-            '#f59e0b',
-            '#eab308',
-          ],
-          data: topUsers.map((u) => [u.name, u.count]),
-        },
-      ],
-      credits: { enabled: false },
-    };
-
-    const chart = Highcharts.chart(chartContainerRef5.current, chartOptions);
-
-    return () => {
-      chart?.destroy();
-    };
-  }, [topUsers]);
-
-  useEffect(() => {
-    if (!chartContainerRef6.current) return;
-
-    const chartOptions: Highcharts.Options = {
-      chart: {
-        type: 'spline',
-        backgroundColor: 'transparent',
-        height: 450,
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.3)',
-        borderRadius: 8,
-        spacingRight: 10,
-        spacingBottom: 10,
-      },
-      title: {
-        text: 'Oracle - Sessions / CPU',
-        style: { color: '#ffffff', fontSize: '18px' },
-      },
-      xAxis: {
-        type: 'datetime',
-        labels: {
-          style: { color: '#ffffff', fontSize: '12px' },
-          format: '{value:%H:%M}',
-        },
-        gridLineColor: 'rgba(255, 255, 255, 0.1)',
-      },
-      yAxis: [
-        {
-          title: {
-            text: 'Sessions actives',
-            style: { color: '#10b981' },
-          },
-          labels: {
-            style: { color: '#10b981' },
-          },
-          gridLineColor: 'rgba(255, 255, 255, 0.1)',
-        },
-        {
-          title: {
-            text: 'CPU (%)',
-            style: { color: '#f59e0b' },
-          },
-          labels: {
-            style: { color: '#f59e0b' },
-            format: '{value}%',
-          },
-          opposite: true,
-          gridLineColor: 'rgba(255, 255, 255, 0.05)',
-        },
-      ],
-      legend: {
-        enabled: true,
-        itemStyle: { color: '#ffffff' },
-      },
-      tooltip: {
-        shared: true,
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        borderColor: 'rgba(255, 255, 255, 0.3)',
-        style: { color: '#ffffff' },
-        xDateFormat: '%d/%m/%Y %H:%M',
-      },
-      plotOptions: {
-        spline: {
-          animation: {
-            duration: 1000,
-          },
-          marker: {
-            enabled: false,
-            states: {
-              hover: {
-                enabled: true,
-                radius: 5,
-              },
-            },
-          },
-          lineWidth: 2,
-        },
-      },
-      series: [
-        {
-          type: 'spline',
-          name: 'Sessions actives',
-          yAxis: 0,
-          data: oracleMetrics.timestamps.map((time, index) => [
-            time,
-            oracleMetrics.sessions[index],
-          ]),
-          color: '#10b981',
-          animation: {
-            duration: 1000,
-          },
-        },
-        {
-          type: 'spline',
-          name: 'CPU (%)',
-          yAxis: 1,
-          data: oracleMetrics.timestamps.map((time, index) => [time, oracleMetrics.cpu[index]]),
-          color: '#f59e0b',
-          animation: {
-            duration: 1000,
-            defer: 500,
-          },
-        },
-      ],
-      credits: { enabled: false },
-    };
-
-    const chart = Highcharts.chart(chartContainerRef6.current, chartOptions);
-    return () => {
-      chart?.destroy();
-    };
-  }, [oracleMetrics]);
-
-  useEffect(() => {
-    if (!chartContainerRef7.current) return;
-
-    const chartOptions: Highcharts.Options = {
-      chart: {
-        type: 'pie',
-        backgroundColor: 'transparent',
-        height: 450,
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.3)',
-        borderRadius: 8,
-        events: {
-          render() {
-            // eslint-disable-next-line @typescript-eslint/no-this-alias
-            const chart = this;
-            const series = chart.series[0];
-
-            if (
-              !series.center ||
-              series.center[0] === undefined ||
-              series.center[1] === undefined
-            ) {
-              return;
-            }
-
-            if (zendeskLabelRef.current) {
-              zendeskLabelRef.current.destroy();
-            }
-
-            const centerX = series.center[0] + chart.plotLeft;
-            const centerY = series.center[1] + chart.plotTop;
-
-            const group = chart.renderer.g().add();
-
-            chart.renderer
-              .text('Total', 0, 0)
-              .css({
-                color: '#ffffff',
-                fontSize: '14px',
-                textAlign: 'center',
-              })
-              .attr({
-                'text-anchor': 'middle',
-              })
-              .add(group);
-
-            chart.renderer
-              .text(String(zendeskTickets.total), 0, 30)
-              .css({
-                color: '#ffffff',
-                fontSize: '32px',
-                fontWeight: 'bold',
-                textAlign: 'center',
-              })
-              .attr({
-                'text-anchor': 'middle',
-              })
-              .add(group);
-
-            const groupBox = group.getBBox();
-
-            group.attr({
-              translateX: centerX - groupBox.width / 2 - groupBox.x,
-              translateY: centerY - groupBox.height / 2 - groupBox.y,
-            });
-
-            zendeskLabelRef.current = group;
-          },
-        },
-      },
-      title: {
-        text: 'Tickets Zendesk',
-        style: { color: '#ffffff', fontSize: '18px' },
-      },
-      tooltip: {
-        pointFormat: '<b>{point.y}</b> tickets ({point.percentage:.1f}%)',
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        borderColor: 'rgba(255, 255, 255, 0.3)',
-        style: { color: '#ffffff' },
-      },
-      plotOptions: {
-        pie: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          innerSize: '75%',
-          dataLabels: {
-            enabled: true,
-            format: '<b>{point.name}</b><br>{point.y} ({point.percentage:.1f}%)',
-            style: { color: '#ffffff', fontSize: '13px', fontWeight: 'bold' },
-          },
-          showInLegend: true,
-        },
-      },
-      legend: {
-        enabled: true,
-        itemStyle: { color: '#ffffff' },
-        layout: 'horizontal',
-        align: 'center',
-        verticalAlign: 'bottom',
-      },
-      series: [
-        {
-          type: 'pie',
-          name: 'Tickets',
-          data: zendeskTickets.data,
-        },
-      ],
-      credits: { enabled: false },
-    };
-
-    const chart = Highcharts.chart(chartContainerRef7.current, chartOptions);
-
-    return () => {
-      chart?.destroy();
-    };
-  }, [zendeskTickets]);
-
   return (
     <ErrorBoundary>
       <section className={styles.section} aria-label="Section TITAN">
@@ -467,16 +83,136 @@ const TitanSection = () => {
           <TitanStats stats={stats} />
           <div className={styles.chartsScrollContainer}>
             <div className={styles.chartCard}>
-              <div ref={chartContainerRef4} style={{ minHeight: 450 }} />
+              <ChartWrapper
+                type="pie"
+                title="Top 15 clients"
+                series={[
+                  {
+                    type: 'pie',
+                    name: 'Opérations',
+                    data: topClientsPie.map((item) => ({ name: item.name, y: item.count })),
+                    colors: [
+                      '#10b981',
+                      '#14b8a6',
+                      '#06b6d4',
+                      '#0ea5e9',
+                      '#3b82f6',
+                      '#6366f1',
+                      '#8b5cf6',
+                      '#a855f7',
+                      '#d946ef',
+                      '#ec4899',
+                      '#f43f5e',
+                      '#ef4444',
+                      '#f97316',
+                      '#f59e0b',
+                      '#eab308',
+                    ],
+                  },
+                ]}
+                height={450}
+                showDataLabels={true}
+                dataLabelFormat="<b>{point.name}</b>: {point.percentage:.1f}%"
+                showLegend={false}
+                showBorder={true}
+                borderColor="rgba(255, 255, 255, 0.3)"
+              />
             </div>
             <div className={styles.chartCard}>
-              <div ref={chartContainerRef5} style={{ minHeight: 500 }} />
+              <ChartWrapper
+                type="bar"
+                title="Top 15 utilisateurs"
+                series={[
+                  {
+                    type: 'bar',
+                    name: 'Utilisateurs',
+                    colorByPoint: true,
+                    colors: [
+                      '#10b981',
+                      '#14b8a6',
+                      '#06b6d4',
+                      '#0ea5e9',
+                      '#3b82f6',
+                      '#6366f1',
+                      '#8b5cf6',
+                      '#a855f7',
+                      '#d946ef',
+                      '#ec4899',
+                      '#f43f5e',
+                      '#ef4444',
+                      '#f97316',
+                      '#f59e0b',
+                      '#eab308',
+                    ],
+                    data: topUsers.map((u) => ({ name: u.name, y: u.count })),
+                  },
+                ]}
+                height={500}
+                showLegend={false}
+                showDataLabels={true}
+              />
             </div>
             <div className={styles.chartCard}>
-              <div ref={chartContainerRef6} style={{ minHeight: 450 }} />
+              <ChartWrapper
+                type="spline"
+                title="Oracle - Sessions / CPU"
+                series={[
+                  {
+                    type: 'spline',
+                    name: 'Sessions actives',
+                    yAxis: 0,
+                    color: '#10b981',
+                    data: oracleMetrics.timestamps.map((time, index) => ({
+                      x: time,
+                      y: oracleMetrics.sessions[index],
+                    })),
+                  },
+                  {
+                    type: 'spline',
+                    name: 'CPU (%)',
+                    yAxis: 1,
+                    color: '#f59e0b',
+                    data: oracleMetrics.timestamps.map((time, index) => ({
+                      x: time,
+                      y: oracleMetrics.cpu[index],
+                    })),
+                  },
+                ]}
+                height={450}
+                xAxisType="datetime"
+                xAxisFormat="{value:%H:%M}"
+                yAxis={[
+                  { title: 'Sessions actives', titleColor: '#10b981', labelColor: '#10b981' },
+                  {
+                    title: 'CPU (%)',
+                    titleColor: '#f59e0b',
+                    labelColor: '#f59e0b',
+                    opposite: true,
+                    format: '{value}%',
+                  },
+                ]}
+                showLegend={true}
+              />
             </div>
             <div className={styles.chartCard}>
-              <div ref={chartContainerRef7} style={{ minHeight: 450 }} />
+              <ChartWrapper
+                type="pie"
+                title="Tickets Zendesk"
+                series={[
+                  {
+                    type: 'pie',
+                    name: 'Tickets',
+                    innerSize: '75%',
+                    data: zendeskTickets.data,
+                  },
+                ]}
+                height={450}
+                showLegend={true}
+                showDataLabels={true}
+                dataLabelFormat="<b>{point.name}</b><br>{point.y} ({point.percentage:.1f}%)"
+                tooltipFormat="<b>{point.y}</b> tickets ({point.percentage:.1f}%)"
+                centerLabel={{ title: 'Total', value: zendeskTickets.total, enabled: true }}
+              />
             </div>
           </div>
         </div>

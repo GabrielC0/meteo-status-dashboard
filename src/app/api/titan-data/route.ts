@@ -6,7 +6,7 @@ import titanService from '@/lib/db/$titan';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+const GET = async () => {
   try {
     const [companies, sessions, ticketsStats] = await Promise.all([
       marketDataService.getAllCompaniesWithOperations(),
@@ -35,4 +35,6 @@ export async function GET() {
       { status: 500 },
     );
   }
-}
+};
+
+export { GET };

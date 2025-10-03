@@ -4,7 +4,7 @@ import { getPoolStats, testConnection } from '@/lib/db/config';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+const GET = async () => {
   const startTime = Date.now();
 
   try {
@@ -43,4 +43,6 @@ export async function GET() {
       { status: 503 },
     );
   }
-}
+};
+
+export { GET };

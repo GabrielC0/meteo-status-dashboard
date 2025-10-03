@@ -63,6 +63,7 @@ export type TitanDashboardData = {
       devise1: string;
       devise2?: string;
       typeRecuperation: string;
+      status: string;
     }>;
   }[];
   sessions: TitanSession[];

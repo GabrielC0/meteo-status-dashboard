@@ -1,10 +1,11 @@
 import type { Metadata, Viewport } from 'next';
 
-import { LanguageProvider } from '@/i18n';
 import { StoreProvider } from '@/stores';
 
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import { HtmlLangUpdater } from '@/components/layout';
+import { IntlProviderWrapper } from '@/components/IntlProvider';
+import { SessionProviderWrapper } from '@/components/providers/SessionProviderWrapper';
 
 import './globals.css';
 
@@ -45,8 +46,6 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export function reportWebVitals(_metric: unknown) {}
-
 const RootLayout = ({
   children,
 }: Readonly<{
@@ -55,12 +54,14 @@ const RootLayout = ({
   return (
     <html lang="fr">
       <body>
-        <StoreProvider>
-          <LanguageProvider>
-            <HtmlLangUpdater />
-            <ErrorBoundary>{children}</ErrorBoundary>
-          </LanguageProvider>
-        </StoreProvider>
+        <SessionProviderWrapper>
+          <StoreProvider>
+            <IntlProviderWrapper>
+              <HtmlLangUpdater />
+              <ErrorBoundary>{children}</ErrorBoundary>
+            </IntlProviderWrapper>
+          </StoreProvider>
+        </SessionProviderWrapper>
       </body>
     </html>
   );

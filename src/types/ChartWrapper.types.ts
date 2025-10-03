@@ -2,6 +2,7 @@ export type ChartType = 'pie' | 'column' | 'bar' | 'spline' | 'line' | 'area';
 
 export type ChartDataPoint = {
   name?: string;
+  x?: number;
   y: number;
   color?: string;
 };
@@ -48,4 +49,5 @@ export type ChartWrapperProps = {
   xAxisRotation?: number;
   tooltipFormat?: string;
   onRenderComplete?: () => void;
+  centerLabel?: { title: string; value: string | number; enabled?: boolean };
 };

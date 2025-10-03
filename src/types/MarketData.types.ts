@@ -1,11 +1,14 @@
 export type MarketDataStatus = 'SUCCESS' | 'WARNING' | 'ERROR' | 'UNKNOWN';
 
+export type OverallStatus = 'SUCCESS' | 'WARNING' | 'ERROR';
+
 export type MarketDataOperation = {
   operationType: string;
   lastMarketDataUpdate: string;
   devise1: string;
   devise2?: string;
   typeRecuperation: string;
+  status: MarketDataStatus;
 };
 
 export type MarketDataCompany = {

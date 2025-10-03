@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 
-import { LANGUAGES } from '@/i18n/localeUtils';
+import { LANGUAGES } from '@/i18n/Locale.types';
 import { Locale } from '@/i18n/messages';
 import { useLanguage } from '@/i18n';
 
-const LanguageSwitcher: React.FC = () => {
+const LanguageSwitcher = () => {
   const { locale, setLocale } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredLanguage, setHoveredLanguage] = useState<Locale | null>(null);
@@ -127,5 +127,7 @@ const LanguageSwitcher: React.FC = () => {
     </div>
   );
 };
+
+LanguageSwitcher.displayName = 'Components.LanguageSwitcher';
 
 export default LanguageSwitcher;

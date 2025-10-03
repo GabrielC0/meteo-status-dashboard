@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 
-export default function robots(): MetadataRoute.Robots {
+const robots = (): MetadataRoute.Robots => {
   const baseUrl = 'https://example.com';
   return {
     rules: {
@@ -10,4 +10,6 @@ export default function robots(): MetadataRoute.Robots {
     sitemap: `${baseUrl}/sitemap.xml`,
     host: baseUrl,
   };
-}
+};
+
+export default robots;

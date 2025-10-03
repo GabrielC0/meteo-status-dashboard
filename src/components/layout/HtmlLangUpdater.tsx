@@ -8,7 +8,7 @@ const HtmlLangUpdater = () => {
   const { locale } = useLanguage();
 
   useEffect(() => {
-    if (typeof document !== 'undefined') {
+    if (typeof document !== 'undefined' && locale) {
       document.documentElement.setAttribute('lang', locale);
     }
   }, [locale]);
