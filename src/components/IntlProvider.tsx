@@ -1,0 +1,29 @@
+'use client';
+
+import { IntlProvider } from 'react-intl';
+
+import { messages } from '@/i18n/messages';
+
+type IntlProviderProps = {
+  children: React.ReactNode;
+};
+
+const getMessages = (locale: string) => {
+  if (locale === 'en') return messages.en;
+  if (locale === 'es') return messages.es;
+  if (locale === 'pt') return messages.pt;
+  if (locale === 'it') return messages.it;
+  return messages.fr;
+};
+
+export const IntlProviderWrapper = ({ children }: IntlProviderProps) => {
+  const currentLocale = 'fr';
+
+  return (
+    <IntlProvider locale={currentLocale} messages={getMessages(currentLocale)} defaultLocale="fr">
+      {children}
+    </IntlProvider>
+  );
+};
+
+IntlProviderWrapper.displayName = 'Components.IntlProviderWrapper';

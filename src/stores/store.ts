@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import titanReducer from './titanSlice';
+import languageReducer from './languageSlice';
 
 export const store = configureStore({
   reducer: {
     titan: titanReducer,
+    language: languageReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

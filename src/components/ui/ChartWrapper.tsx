@@ -6,6 +6,7 @@ import Highcharts from 'highcharts';
 import type { ChartWrapperProps } from '@/types/ChartWrapper.types';
 
 import ErrorBoundary from './ErrorBoundary';
+import styles from '@/styles/components/ui/ChartWrapper.module.scss';
 
 const ChartWrapper = ({
   type,
@@ -29,6 +30,7 @@ const ChartWrapper = ({
   xAxisRotation,
   tooltipFormat,
   onRenderComplete,
+  centerLabel,
 }: ChartWrapperProps) => {
   const chartContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -189,16 +191,53 @@ const ChartWrapper = ({
         style: { color: '#ffffff' },
       },
       plotOptions: buildPlotOptions(),
-      // @ts-expect-error - Highcharts series type inference limitation
+      //Highcharts series type inference limitation
       series: series.map((s) => ({
         ...s,
         type: s.type || type,
         colors: s.colors || colors,
-      })),
+      })) as Highcharts.SeriesOptionsType[],
       credits: { enabled: false },
     };
 
     const chart = Highcharts.chart(chartContainerRef.current, chartOptions);
+
+    if (type === 'pie' && chart && centerLabel?.enabled) {
+      const renderCenter = () => {
+        const cx = chart.plotLeft + chart.plotWidth / 2;
+        const cy = chart.plotTop + chart.plotHeight / 2;
+        const existing = chart.container.querySelector('g[data-center-group="1"]');
+
+        if (existing && existing.parentNode) {
+          existing.parentNode.removeChild(existing);
+        }
+
+        const group = chart.renderer.g().attr({ 'data-center-group': '1' }).add();
+
+        chart.renderer
+          .text(centerLabel.title, 0, 0)
+          .css({ color: '#ffffff', fontSize: '14px', textAlign: 'center' })
+          .attr({ 'text-anchor': 'middle' })
+          .add(group);
+
+        chart.renderer
+          .text(String(centerLabel.value), 0, 26)
+          .css({ color: '#ffffff', fontSize: '32px', fontWeight: 'bold', textAlign: 'center' })
+          .attr({ 'text-anchor': 'middle' })
+          .add(group);
+
+        const box = group.getBBox();
+
+        group.attr({
+          translateX: cx - box.width / 2 - box.x,
+          translateY: cy - box.height / 2 - box.y,
+        });
+      };
+
+      renderCenter();
+      Highcharts.addEvent(chart, 'render', renderCenter);
+    }
+
     return () => {
       chart?.destroy();
     };
@@ -224,11 +263,12 @@ const ChartWrapper = ({
     xAxisRotation,
     tooltipFormat,
     onRenderComplete,
+    centerLabel,
   ]);
 
   return (
     <ErrorBoundary>
-      <div ref={chartContainerRef} style={{ minHeight: height }} />
+      <div ref={chartContainerRef} className={styles.chartWrapper__container} style={{ minHeight: `${height}px` }} />
     </ErrorBoundary>
   );
 };

@@ -1,0 +1,66 @@
+// Portal page styles
+.portalPage {
+  &__loadingContainer {
+    text-align: center;
+    color: white;
+    padding: 2rem;
+  }
+
+  &__redirectContainer {
+    text-align: center;
+    color: white;
+    padding: 2rem;
+  }
+
+  &__mainContent {
+    padding: 2rem;
+    color: white;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  &__title {
+    // Title styles
+  }
+
+  &__description {
+    // Description styles
+  }
+
+  &__servicesGrid {
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  &__serviceCard {
+    padding: 1rem;
+    background: rgba(40, 167, 69, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(40, 167, 69, 0.3);
+
+    &--titan {
+      // TITAN service specific styles
+    }
+
+    &--market {
+      // Market data specific styles
+    }
+
+    &--system {
+      // System specific styles
+    }
+  }
+
+  &__serviceTitle {
+    // Service title styles
+  }
+
+  &__serviceStatus {
+    // Service status styles
+  }
+}

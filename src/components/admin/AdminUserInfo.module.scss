@@ -1,0 +1,427 @@
+.userInfo {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 32px 16px 32px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  font-weight: 400;
+
+  &__loading {
+    display: flex;
+    justify-content: flex-end;
+    padding: 24px 32px 16px 32px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    font-family:
+      system-ui,
+      -apple-system,
+      sans-serif;
+    font-weight: 400;
+  }
+
+  &__session {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__statusIndicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #10b981;
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+  }
+
+  &__userName {
+    font-weight: 600;
+    color: white;
+  }
+
+  &__settingsButton {
+    background: rgba(156, 163, 175, 0.1);
+    border: 1px solid rgba(156, 163, 175, 0.3);
+    border-radius: 6px;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    min-width: 36px;
+    min-height: 36px;
+
+    &:hover {
+      background: rgba(156, 163, 175, 0.2);
+      border-color: rgba(156, 163, 175, 0.5);
+      transform: translateY(-1px);
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(156, 163, 175, 0.5);
+    }
+  }
+
+  &__logoutButton {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 6px;
+    color: #ef4444;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    min-width: 36px;
+    min-height: 36px;
+
+    &:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.5);
+      transform: translateY(-1px);
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.5);
+    }
+  }
+
+  &__settingsIcon,
+  &__logoutIcon {
+    color: currentcolor;
+  }
+}
+
+.popupOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 37, 61, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.popupContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
+  min-width: 1140px;
+}
+
+.popup {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  width: 500px;
+  min-width: 500px;
+  max-width: 500px;
+  height: 520px;
+  min-height: 520px;
+  max-height: 520px;
+  overflow: hidden;
+  padding: 40px;
+  color: white;
+  text-align: left;
+  transition:
+    transform 0.3s ease-in-out,
+    opacity 0.3s ease-in-out;
+  flex-shrink: 0;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+  }
+
+  &__closeButton {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 6px;
+    color: #ef4444;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    min-width: 36px;
+    min-height: 36px;
+    margin-right: 16px;
+
+    &:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.5);
+    }
+  }
+
+  &__section {
+    margin-bottom: 48px;
+
+    &Title {
+      font-size: 18px;
+      font-weight: 600;
+      color: white;
+    }
+
+    &Header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-right: 16px;
+      margin-bottom: 15px;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    margin-top: 16px;
+  }
+
+  &__inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__label {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  &__input {
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      border-color: rgba(0, 153, 255, 0.5);
+    }
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+  }
+
+  &__button {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #0099ff 0%, #00568a 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+
+    &:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    &--secondary {
+      background: rgba(156, 163, 175, 0.1);
+      border-color: rgba(156, 163, 175, 0.3);
+      color: #9ca3af;
+
+      &:hover {
+        background: rgba(156, 163, 175, 0.2);
+        border-color: rgba(156, 163, 175, 0.5);
+      }
+    }
+  }
+
+  &__userList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__userItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+  }
+
+  &__userInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__userName {
+    font-weight: 600;
+    color: white;
+  }
+
+  &__userEmail {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  &__userRole {
+    display: inline-block;
+    padding: 3px 5px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    min-width: fit-content;
+    text-align: center;
+    white-space: nowrap;
+
+    &--admin {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #3b82f6;
+    }
+
+    &--user {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #10b981;
+    }
+  }
+
+  &__userActions {
+    display: flex;
+    gap: 8px;
+  }
+
+  &__actionButton {
+    padding: 8px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    min-height: 32px;
+
+    &--edit {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #3b82f6;
+
+      &:hover {
+        background: rgba(59, 130, 246, 0.2);
+        border-color: rgba(59, 130, 246, 0.5);
+      }
+    }
+
+    &--delete {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+
+      &:hover {
+        background: rgba(239, 68, 68, 0.2);
+        border-color: rgba(239, 68, 68, 0.5);
+      }
+    }
+
+    &--add {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #10b981;
+
+      &:hover {
+        background: rgba(16, 185, 129, 0.2);
+        border-color: rgba(16, 185, 129, 0.5);
+      }
+    }
+  }
+
+  &__radioGroup {
+    display: flex;
+    gap: 16px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+  }
+
+  &__radioLabel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: white;
+    }
+  }
+
+  &__radioInput {
+    width: 16px;
+    height: 16px;
+    accent-color: #0099ff;
+    cursor: pointer;
+  }
+
+  &__radioText {
+    user-select: none;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 1rem;
+  }
+}

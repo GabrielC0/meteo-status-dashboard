@@ -1,3 +1,29 @@
+// StatusIcon component styles
+.statusIcon {
+  &__container {
+    display: inline-block;
+    cursor: default;
+  }
+}
+
+// Status-specific styles
+.iconSUCCESS {
+  color: #22c55e;
+}
+
+.iconWARNING {
+  color: #f59e0b;
+}
+
+.iconERROR {
+  color: #ef4444;
+}
+
+.iconUNKNOWN {
+  color: #6b7280;
+}
+
+// Size variants
 .small {
   width: 16px;
   height: 16px;
@@ -11,62 +37,4 @@
 .large {
   width: 24px;
   height: 24px;
-}
-
-.iconSUCCESS {
-  color: #28a745;
-  transition: all 0.2s ease;
-}
-
-.iconWARNING {
-  color: #ffc107;
-  transition: all 0.2s ease;
-}
-
-.iconERROR {
-  color: #dc3545;
-  transition: all 0.2s ease;
-}
-
-.iconUNKNOWN {
-  color: #6c757d;
-  transition: all 0.2s ease;
-}
-
-.iconSUCCESS:hover {
-  color: #218838;
-  transform: scale(1.1);
-}
-
-.iconWARNING:hover {
-  color: #e0a800;
-  transform: scale(1.1);
-}
-
-.iconERROR:hover {
-  color: #c82333;
-  transform: scale(1.1);
-}
-
-.iconUNKNOWN:hover {
-  color: #5a6268;
-  transform: scale(1.1);
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-
-.withPulseSuccess {
-  animation: pulse 2s infinite;
-}
-
-.withPulseError {
-  animation: pulse 1.5s infinite;
 }

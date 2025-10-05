@@ -17,6 +17,7 @@ module.exports = {
     'length-zero-no-unit': null,
     'shorthand-property-no-redundant-values': null,
     'declaration-block-no-redundant-longhand-properties': null,
+    'scss/at-extend-no-missing-placeholder': null,
   },
   ignoreFiles: ['**/node_modules/**', '**/.next/**', '**/dist/**', '**/out/**', '**/build/**'],
 };

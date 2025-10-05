@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+const sitemap = (): MetadataRoute.Sitemap => {
   const baseUrl = 'https://example.com';
   return [
     {
@@ -16,4 +16,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
   ];
-}
+};
+
+export default sitemap;

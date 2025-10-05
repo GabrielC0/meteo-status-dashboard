@@ -1,14 +1,8 @@
-// Store & Types
 export { store } from './store';
 export type { RootState, AppDispatch } from './store';
 
-// Hooks
-export { useAppSelector } from './hooks';
+export { useAppSelector, useAppDispatch } from './hooks';
 
-// Provider
-export { default as StoreProvider } from './StoreProvider';
-
-// Titan Slice - Actions & Selectors
 export {
   fetchTitanData,
   clearTitanData,
@@ -18,3 +12,5 @@ export {
   getTitanIsLoading,
   getTitanError,
 } from './titanSlice';
+
+export { setLocale, clearLanguageData, getCurrentLocale } from './languageSlice';

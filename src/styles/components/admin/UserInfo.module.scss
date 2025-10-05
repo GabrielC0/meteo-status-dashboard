@@ -1,0 +1,177 @@
+// UserInfo component styles
+.userInfo {
+  &__loading {
+    // Loading state styles
+  }
+
+  &__container {
+    // Main container styles
+  }
+
+  &__session {
+    // Session info styles
+  }
+
+  &__statusIndicator {
+    // Status indicator styles
+  }
+
+  &__userName {
+    // User name styles
+  }
+
+  &__settingsButton {
+    // Settings button styles
+  }
+
+  &__settingsIcon {
+    // Settings icon styles
+  }
+
+  &__logoutButton {
+    // Logout button styles
+  }
+
+  &__logoutIcon {
+    // Logout icon styles
+  }
+}
+
+.popup {
+  &__overlay {
+    // Popup overlay styles
+  }
+
+  &__container {
+    // Popup container styles
+  }
+
+  &__header {
+    // Popup header styles
+  }
+
+  &__title {
+    // Popup title styles
+  }
+
+  &__closeButton {
+    // Close button styles
+  }
+
+  &__section {
+    // Section styles
+  }
+
+  &__sectionHeader {
+    // Section header styles
+  }
+
+  &__sectionTitle {
+    // Section title styles
+  }
+
+  &__form {
+    // Form styles
+  }
+
+  &__inputGroup {
+    // Input group styles
+  }
+
+  &__label {
+    // Label styles
+  }
+
+  &__input {
+    // Input styles
+  }
+
+  &__radioGroup {
+    // Radio group styles
+  }
+
+  &__radioLabel {
+    // Radio label styles
+  }
+
+  &__radioInput {
+    // Radio input styles
+  }
+
+  &__radioText {
+    // Radio text styles
+  }
+
+  &__button {
+    // Button styles
+
+    &--secondary {
+      // Secondary button styles
+    }
+  }
+
+  &__actionButton {
+    // Action button styles
+
+    &--add {
+      // Add action button styles
+    }
+
+    &--edit {
+      // Edit action button styles
+    }
+
+    &--delete {
+      // Delete action button styles
+    }
+  }
+
+  &__userList {
+    // User list styles
+  }
+
+  &__userItem {
+    // User item styles
+  }
+
+  &__userInfo {
+    // User info styles
+  }
+
+  &__userEmail {
+    // User email styles
+  }
+
+  &__userRole {
+    // User role styles
+
+    &--user {
+      // User role styles
+    }
+
+    &--admin {
+      // Admin role styles
+    }
+  }
+
+  &__userActions {
+    // User actions styles
+  }
+
+  &__buttonGroup {
+    display: flex;
+    gap: 8px;
+  }
+
+  &__loadingMessage {
+    text-align: center;
+    padding: 20px;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  &__emptyMessage {
+    text-align: center;
+    padding: 20px;
+    color: rgba(255, 255, 255, 0.7);
+  }
+}

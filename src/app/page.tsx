@@ -1,30 +1,27 @@
-import dynamic from 'next/dynamic';
+'use client';
 
-import { ClientLogoIcon } from '@/components/icons/LogoIcon';
-
-import styles from '@/styles/app/page.module.scss';
-export const metadata = {
-  title: 'Accueil | Météo Statuts',
-  description: 'Tableau de bord principal des statuts et données de marché.',
-};
-
-const Dashboard = dynamic(
-  () => import('@/features/weather-status/components').then((m) => m.Dashboard),
-  {
-    ssr: true,
-    loading: () => null,
-  },
-);
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const HomePage = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push('/login');
+  }, [router]);
+
   return (
-    <div className={styles.container}>
-      <div className={styles.logoBackground}>
-        <ClientLogoIcon />
-      </div>
-      <div className={styles.content}>
-        <Dashboard />
-      </div>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        color: 'white',
+        fontSize: '1.2rem',
+      }}
+    >
+      Redirection vers la page de connexion...
     </div>
   );
 };

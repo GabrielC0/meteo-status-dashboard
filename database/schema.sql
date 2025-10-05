@@ -6,6 +6,7 @@
 -- =============================================================================
 
 -- Suppression des tables si elles existent (pour réinitialisation)
+DROP TABLE IF EXISTS `users`;
 DROP TABLE IF EXISTS `titan_tickets`;
 DROP TABLE IF EXISTS `titan_sessions`;
 DROP TABLE IF EXISTS `market_data_operations`;
@@ -15,7 +16,27 @@ DROP TABLE IF EXISTS `system_status_history`;
 DROP TABLE IF EXISTS `audit_logs`;
 
 -- =============================================================================
--- TABLE 1: market_data_companies
+-- TABLE 1: users
+-- Description: Utilisateurs du système d'authentification
+-- =============================================================================
+CREATE TABLE `users` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `email` VARCHAR(255) NOT NULL UNIQUE COMMENT 'Email utilisateur (login)',
+  `password` VARCHAR(255) NOT NULL COMMENT 'Mot de passe hashé',
+  `name` VARCHAR(255) NOT NULL COMMENT 'Nom complet utilisateur',
+  `role` ENUM('admin', 'user') NOT NULL DEFAULT 'user' COMMENT 'Rôle utilisateur',
+  `is_active` BOOLEAN NOT NULL DEFAULT TRUE COMMENT 'Compte actif',
+  `last_login` DATETIME NULL COMMENT 'Dernière connexion',
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX `idx_email` (`email`),
+  INDEX `idx_role` (`role`),
+  INDEX `idx_active` (`is_active`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+COMMENT='Utilisateurs système';
+
+-- =============================================================================
+-- TABLE 2: market_data_companies
 -- Description: Entreprises utilisant les données de marché
 -- =============================================================================
 CREATE TABLE `market_data_companies` (
@@ -155,6 +176,13 @@ COMMENT='Logs d''audit pour traçabilité';
 -- =============================================================================
 -- DONNÉES DE TEST (SEED DATA)
 -- =============================================================================
+
+-- Insertion utilisateur admin par défaut
+-- Mot de passe: 'admin' (hashé avec bcrypt)
+INSERT INTO `users` 
+  (`email`, `password`, `name`, `role`, `is_active`) 
+VALUES
+  ('admin@gmail.com', '$2b$10$imiRkrUB2imxRnRgD/roxewABY8rL2y8OO1KRhAs2xEvQK/9NJdjG', 'Administrateur', 'admin', TRUE);
 
 -- Insertion entreprises Market Data
 INSERT INTO `market_data_companies` 

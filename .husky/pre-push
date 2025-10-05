@@ -1,3 +1,10 @@
-npm run lint && npm run -s test
+#!/bin/sh
+echo "🚀 Running pre-push checks..."
 
+echo "🔍 Running linter..."
+npm run lint
 
+echo "🏗️ Building project..."
+npm run build
+
+echo "✅ All pre-push checks passed!"

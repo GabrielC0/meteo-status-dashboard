@@ -1,22 +1,18 @@
+'use client';
+
 import dynamic from 'next/dynamic';
 import { memo, useEffect, useMemo, useState } from 'react';
 
 import { useTranslations } from '@/i18n';
 import type { MarketDataStatus } from '@/types/MarketData.types';
 
-import { StatusIcons } from '@/components/icons';
+import { StatusIcons } from '@/components/Icons';
 
 import styles from '@/styles/components/ui/StatusIcon.module.scss';
 
 const Tooltip = dynamic(() => import('react-tooltip').then((m) => m.Tooltip), {
   ssr: false,
 });
-
-export type IconProps = {
-  width?: number;
-  height?: number;
-  className?: string;
-};
 
 type StatusIconProps = {
   status: MarketDataStatus;
@@ -71,7 +67,7 @@ const StatusIcon = ({ status, size = 'medium', showTooltip = true }: StatusIconP
     <>
       <div
         data-tooltip-id={tooltipId || undefined}
-        style={{ display: 'inline-block', cursor: 'default' }}
+        className={styles.statusIcon__container}
         role="img"
         aria-label={ariaLabel}
       >

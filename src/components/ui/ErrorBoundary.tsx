@@ -20,10 +20,7 @@ export default class ErrorBoundary extends React.Component<ErrorBoundaryProps, E
     return { hasError: true };
   }
 
-  componentDidCatch(_error: unknown, _errorInfo: unknown): void {
-    // Relai minimal: remplacez par un logger distant (Sentry, Logtail, etc.)
-    // console.error('ErrorBoundary caught:', error, errorInfo);
-  }
+  componentDidCatch(_error: Error, _errorInfo: React.ErrorInfo): void {}
 
   render(): React.ReactNode {
     if (this.state.hasError) {

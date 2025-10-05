@@ -1,0 +1,14 @@
+// Admin page styles
+.adminPage {
+  &__loadingContainer {
+    text-align: center;
+    color: white;
+    padding: 2rem;
+  }
+
+  &__redirectContainer {
+    text-align: center;
+    color: white;
+    padding: 2rem;
+  }
+}

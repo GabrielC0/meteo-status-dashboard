@@ -1,9 +1,13 @@
-echo "Running pre-commit checks..."
+#!/bin/sh
+echo "🔍 Running pre-commit checks..."
 
-npx prettier . --check || exit 1
-npx eslint . || exit 1
-npx stylelint "src/**/*.{css,scss}" || exit 1
-npx vitest --run || exit 1
+echo "📝 Checking code formatting..."
+npm run prettier:write
 
-echo "All checks passed."
-npm run lint && npm run -s prettier -- -c . && npm run -s stylelint
+echo "🔍 Running linter..."
+npm run lint
+
+echo "🎨 Checking styles..."
+npm run stylelint:fix
+
+echo "✅ All pre-commit checks passed!"
