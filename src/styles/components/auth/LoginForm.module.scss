@@ -1,13 +1,8 @@
-// LoginForm component styles
 .loginForm {
   &__form {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-  }
-
-  &__inputGroup {
-    // Base styles for input groups
   }
 
   &__label {
@@ -52,7 +47,7 @@
   &__submitButton {
     width: 100%;
     padding: 0.75rem;
-    background: linear-gradient(135deg, #0099FF 0%, #00568a 100%);
+    background: linear-gradient(135deg, #0099ff 0%, #00568a 100%);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
     color: white;

@@ -64,17 +64,25 @@ const PortalPage = () => {
 
       <div className={styles.portalPage__mainContent}>
         <h1 className={styles.portalPage__title}>Portal Client</h1>
-        <p className={styles.portalPage__description}>Consultez les statuts des services et la qualité des données en temps réel.</p>
+        <p className={styles.portalPage__description}>
+          Consultez les statuts des services et la qualité des données en temps réel.
+        </p>
         <div className={styles.portalPage__servicesGrid}>
-          <div className={`${styles.portalPage__serviceCard} ${styles['portalPage__serviceCard--titan']}`}>
+          <div
+            className={`${styles.portalPage__serviceCard} ${styles['portalPage__serviceCard--titan']}`}
+          >
             <h3 className={styles.portalPage__serviceTitle}>Services TITAN</h3>
             <p className={styles.portalPage__serviceStatus}>Opérationnel</p>
           </div>
-          <div className={`${styles.portalPage__serviceCard} ${styles['portalPage__serviceCard--market']}`}>
+          <div
+            className={`${styles.portalPage__serviceCard} ${styles['portalPage__serviceCard--market']}`}
+          >
             <h3 className={styles.portalPage__serviceTitle}>Données de Marché</h3>
             <p className={styles.portalPage__serviceStatus}>Actives</p>
           </div>
-          <div className={`${styles.portalPage__serviceCard} ${styles['portalPage__serviceCard--system']}`}>
+          <div
+            className={`${styles.portalPage__serviceCard} ${styles['portalPage__serviceCard--system']}`}
+          >
             <h3 className={styles.portalPage__serviceTitle}>Système</h3>
             <p className={styles.portalPage__serviceStatus}>✅ Accès utilisateur autorisé</p>
           </div>

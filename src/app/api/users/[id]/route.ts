@@ -39,18 +39,22 @@ export const PUT = async (
       return createErrorResponse('Un utilisateur avec cet email existe déjà', 409);
     }
 
-    let updateQuery =
-      'UPDATE users SET email = ?, name = ?, role = ?, updated_at = CURRENT_TIMESTAMP';
+    const setClauses: string[] = [
+      'email = ?',
+      'name = ?',
+      'role = ?',
+      'updated_at = CURRENT_TIMESTAMP',
+    ];
     const updateParams: (string | number)[] = [email, name, role];
 
     if (password && password.trim() !== '') {
       const bcrypt = await import('bcryptjs');
       const hashedPassword = await bcrypt.hash(password, 10);
-      updateQuery += ', password = ?';
+      setClauses.push('password = ?');
       updateParams.push(hashedPassword);
     }
 
-    updateQuery += ' WHERE id = ?';
+    const updateQuery = `UPDATE users SET ${setClauses.join(', ')} WHERE id = ?`;
     updateParams.push(userId);
 
     await query(updateQuery, updateParams);

@@ -1,7 +1,7 @@
 'use client';
 
 import { memo } from 'react';
-import type { TitanStatsProps } from '../types/Dashboard.types';
+import type { TitanStatsProps } from '@/types/TitanStats.types';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import styles from '@/styles/features/weather-status/components/Dashboard.module.scss';
 

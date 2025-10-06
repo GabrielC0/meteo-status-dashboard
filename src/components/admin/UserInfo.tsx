@@ -11,7 +11,6 @@ import {
   EditIcon,
   DeleteIcon,
 } from '@/components/Icons';
-import styles from './AdminUserInfo.module.scss';
 import type {
   UserInfoProps,
   UserRole,
@@ -19,6 +18,8 @@ import type {
   EditingUser,
   UserListItem,
 } from '@/types/Component.types';
+
+import styles from './AdminUserInfo.module.scss';
 
 const UserInfo = ({ user, isLoading = false, onLogout }: UserInfoProps) => {
   const router = useRouter();

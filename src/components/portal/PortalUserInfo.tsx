@@ -1,6 +1,7 @@
 'use client';
 
 import type { PortalUserInfoProps } from '@/types/Component.types';
+
 import styles from '@/styles/components/portal/PortalUserInfo.module.scss';
 
 const PortalUserInfo = ({ user, isLoading = false, onLogout }: PortalUserInfoProps) => {

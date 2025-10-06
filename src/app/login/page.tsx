@@ -41,21 +41,14 @@ const LoginPage = () => {
       <div className={styles.loginPage__container}>
         <div className={styles.loginPage__formContainer}>
           <div className={styles.loginPage__header}>
-            <h1 className={styles.loginPage__title}>
-              Connexion
-            </h1>
-            <p className={styles.loginPage__subtitle}>
-              Accédez à votre tableau de bord
-            </p>
+            <h1 className={styles.loginPage__title}>Connexion</h1>
+            <p className={styles.loginPage__subtitle}>Accédez à votre tableau de bord</p>
           </div>
 
           <LoginForm onSubmit={handleSubmit} isLoading={isLoading} error={error} />
 
           <div className={styles.loginPage__footer}>
-            <a
-              href="#"
-              className={styles.loginPage__forgotPassword}
-            >
+            <a href="#" className={styles.loginPage__forgotPassword}>
               Mot de passe oublié ?
             </a>
           </div>

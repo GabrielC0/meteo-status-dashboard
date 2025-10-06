@@ -6,6 +6,7 @@ import Highcharts from 'highcharts';
 import type { ChartWrapperProps } from '@/types/ChartWrapper.types';
 
 import ErrorBoundary from './ErrorBoundary';
+
 import styles from '@/styles/components/ui/ChartWrapper.module.scss';
 
 const ChartWrapper = ({
@@ -268,7 +269,11 @@ const ChartWrapper = ({
 
   return (
     <ErrorBoundary>
-      <div ref={chartContainerRef} className={styles.chartWrapper__container} style={{ minHeight: `${height}px` }} />
+      <div
+        ref={chartContainerRef}
+        className={styles.chartWrapper__container}
+        style={{ minHeight: `${height}px` }}
+      />
     </ErrorBoundary>
   );
 };

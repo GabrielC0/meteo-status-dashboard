@@ -8,3 +8,4 @@ export * from './Titan.types';
 export * from './Layout.types';
 export * from './Component.types';
 export * from './Redux.types';
+export * from './TitanStats.types';

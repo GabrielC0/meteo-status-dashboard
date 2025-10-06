@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
+
 import type { LoginFormProps } from '@/types/Component.types';
+
 import styles from '@/styles/components/auth/LoginForm.module.scss';
 
 export const LoginForm = ({ onSubmit, isLoading, error }: LoginFormProps) => {
@@ -14,14 +16,9 @@ export const LoginForm = ({ onSubmit, isLoading, error }: LoginFormProps) => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className={styles.loginForm__form}
-    >
+    <form onSubmit={handleSubmit} className={styles.loginForm__form}>
       <div className={styles.loginForm__inputGroup}>
-        <label className={styles.loginForm__label}>
-          Adresse email
-        </label>
+        <label className={styles.loginForm__label}>Adresse email</label>
         <input
           type="email"
           value={email}
@@ -33,9 +30,7 @@ export const LoginForm = ({ onSubmit, isLoading, error }: LoginFormProps) => {
       </div>
 
       <div className={styles.loginForm__inputGroup}>
-        <label className={styles.loginForm__label}>
-          Mot de passe
-        </label>
+        <label className={styles.loginForm__label}>Mot de passe</label>
         <input
           type="password"
           value={password}
@@ -46,17 +41,9 @@ export const LoginForm = ({ onSubmit, isLoading, error }: LoginFormProps) => {
         />
       </div>
 
-      {error && (
-        <div className={styles.loginForm__error}>
-          {error}
-        </div>
-      )}
+      {error && <div className={styles.loginForm__error}>{error}</div>}
 
-      <button
-        type="submit"
-        disabled={isLoading}
-        className={styles.loginForm__submitButton}
-      >
+      <button type="submit" disabled={isLoading} className={styles.loginForm__submitButton}>
         {isLoading ? 'Connexion...' : 'Se connecter'}
       </button>
     </form>
